@@ -1,0 +1,12 @@
+{
+    // "files": [], // Removed because it's empty and not needed
+    "references": [
+      
+    ],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    }
+  }
