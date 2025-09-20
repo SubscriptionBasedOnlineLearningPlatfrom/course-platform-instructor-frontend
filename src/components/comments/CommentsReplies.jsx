@@ -230,6 +230,39 @@ const CommentsReplies = () => {
                 >
                   Reply
                 </button>
+                {activeReply === c.comment_id ? (
+                    <div className="mt-2">
+                      <textarea
+                        rows="2"
+                        className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Write a reply..."
+                        value={drafts[c.comment_id] || ""}
+                        onChange={(e) =>
+                          setDrafts({
+                            ...drafts,
+                            [c.comment_id]: e.target.value,
+                          })
+                        }
+                      />
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          onClick={() => handleReplySubmit(c.comment_id)}
+                          className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveReply(null);
+                            setDrafts((d) => ({ ...d, [c.id]: "" }));
+                          }}
+                          className="px-3 py-1 bg-gray-400 text-white rounded-md text-sm hover:bg-gray-500"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
 
                 <div className="mt-3 pl-2 border-l border-gray-200 space-y-3">
                   {(c.replies || []).map((reply, idx) => (
@@ -303,39 +336,7 @@ const CommentsReplies = () => {
                     </div>
                   ))}
 
-                  {activeReply === c.comment_id ? (
-                    <div className="mt-2">
-                      <textarea
-                        rows="2"
-                        className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Write a reply..."
-                        value={drafts[c.comment_id] || ""}
-                        onChange={(e) =>
-                          setDrafts({
-                            ...drafts,
-                            [c.comment_id]: e.target.value,
-                          })
-                        }
-                      />
-                      <div className="mt-2 flex gap-2">
-                        <button
-                          onClick={() => handleReplySubmit(c.comment_id)}
-                          className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600"
-                        >
-                          Submit
-                        </button>
-                        <button
-                          onClick={() => {
-                            setActiveReply(null);
-                            setDrafts((d) => ({ ...d, [c.id]: "" }));
-                          }}
-                          className="px-3 py-1 bg-gray-400 text-white rounded-md text-sm hover:bg-gray-500"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
+                  
                 </div>
               </div>
             </div>
