@@ -55,6 +55,49 @@ const deleteChapter = async (lessonId) => {
 };
 
 
+// =======================
+// FILE UPLOAD API
+// =======================
+const addVideo = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file); // key must be 'file'
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/video`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } } //ensures the actual file is sent, not just the file name
+  );
+  return response.data;
+};
+
+const addNote = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/note`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return response.data;
+};
+
+const addAssignment = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/assignment`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return response.data;
+};
+
+
+// resourse delete is not done?
+
+
 
 // =======================
 // CONTEXT
@@ -74,6 +117,10 @@ export const ApiProvider = ({ children }) => {
         deleteModule,
         addChapter,
         deleteChapter,
+        addVideo,
+        addNote,
+        addAssignment,
+
       }}
     >
       {children}
