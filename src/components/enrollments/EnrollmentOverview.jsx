@@ -22,14 +22,11 @@ const EnrollmentOverview = () => {
         if(response.status === 200){
           setStudents(Object.values(response.data));
         }
-
-        console.log(response.data);
       }
       fetchEnrollments();
     } catch (error) {
       console.error("Error fetching enrollments:", error);
-    }
-    
+    } 
   }, []);
 
   // Filter students by search (unchanged)

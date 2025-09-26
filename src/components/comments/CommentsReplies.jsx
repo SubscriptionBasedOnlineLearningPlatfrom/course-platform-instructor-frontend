@@ -5,25 +5,18 @@ import { useApi } from "../../contexts/APIContext";
 
 const CommentsReplies = () => {
   const { BackendAPI } = useApi();
-
-  // const [comments] = useState([
-  //   { id: 1, username: "Alice Johnson", course_title: "React for Beginners", comment: "Really helpful course_title! Loved the explanations.", date: "2025-07-15" },
-  //   { id: 2, username: "Mark Lee", course_title: "Node.js Mastery", comment: "Good content but could use more real-world examples.", date: "2025-07-12" },
-  //   { id: 3, username: "Sophia Davis", course_title: "AI with Python", comment: "Found some sections difficult to follow.", date: "2025-07-10" },
-  // ]);
-
   const [comments, setComments] = useState([]);
   const [search, setSearch] = useState("");
   const [activeReply, setActiveReply] = useState(null); // which comment is showing the textarea
-  const [replies, setReplies] = useState({}); // { [commentId]: ["reply1", "reply2"] }
-  const [drafts, setDrafts] = useState({}); // { [commentId]: "current typing text" }
+  const [replies, setReplies] = useState({}); // { [id]: ["reply1", "reply2"] }
+  const [drafts, setDrafts] = useState({}); // { [id]: "current typing text" }
   const [editing, setEditing] = useState(null); // { id, idx } or null
   const [editDraft, setEditDraft] = useState("");
 
   // Load replies from localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
-    // console.log("Token:", token);
+    
     const fetchReplies = async () => {
       try {
         const response = await axios.get(`${BackendAPI}/comments/comments`, {
@@ -31,11 +24,10 @@ const CommentsReplies = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        // console.log("Response:", response);
         if (response.status === 200) {
           setComments(Object.values(response.data));
         }
-        console.log(response.data);
+        
       } catch (error) {
         console.error("Failed to fetch replies:", error);
       }
@@ -43,13 +35,13 @@ const CommentsReplies = () => {
     fetchReplies();
   }, [BackendAPI]);
 
-  const handleReplySubmit = async (commentId) => {
-    const text = (drafts[commentId] || "").trim();
+  const handleReplySubmit = async (id) => {
+    const text = (drafts[id] || "").trim();
 
     if (!text) return;
 
     const tempReply = {
-      comment_id: commentId,
+      comment_id: id,
       reply_text: text,
       updated_at: new Date().toISOString(),
     };
@@ -57,7 +49,7 @@ const CommentsReplies = () => {
     // for instant UI feedback
     setComments((prev) =>
       prev.map((c) =>
-        c.comment_id === commentId
+        c.comment_id === id
           ? { ...c, replies: [tempReply, ...(c.replies || [])] } // add at top
           : c
       )
@@ -65,7 +57,7 @@ const CommentsReplies = () => {
 
     try {
       const response = await axios.post(
-        `${BackendAPI}/comments/${commentId}/replies`,
+        `${BackendAPI}/comments/${id}/replies`,
         { reply_text: text },
         {
           headers: {
@@ -77,32 +69,31 @@ const CommentsReplies = () => {
       if (response.status === 200) {
         setReplies((prev) => ({
           ...prev,
-          [commentId]: [...(prev[commentId] || []), response.data],
+          [id]: [...(prev[id] || []), response.data],
         }));
-        setDrafts((prev) => ({ ...prev, [commentId]: "" }));
+        setDrafts((prev) => ({ ...prev, [id]: "" }));
         setActiveReply(null);
       }
     } catch (error) {
-      console.log(error);
       console.error("Failed to submit reply:", error);
     }
   };
 
-  const handleStartEdit = (commentId, reply, idx) => {
-    setEditing({ id: commentId, idx, replyId: reply.reply_id });
+  const handleStartEdit = (id, reply, idx) => {
+    setEditing({ id: id, idx, replyId: reply.reply_id });
     setEditDraft(reply.reply_text);
   };
 
   const handleSaveEdit = async () => {
     if (!editing) return;
-    const { commentId, idx, replyId } = editing;
+    const { id, idx, replyId } = editing;
 
     const text = editDraft.trim();
     if (!text) return;
 
     setComments((prev) =>
       prev.map((c) =>
-        c.comment_id === commentId
+        c.comment_id === id
           ? {
               ...c,
               replies: (c.replies || []).map((r) =>
@@ -127,26 +118,24 @@ const CommentsReplies = () => {
       if (response.status === 200) {
         setReplies((prev) => {
           const updated = { ...prev };
-          if (updated[commentId]) {
-            updated[commentId] = [...updated[commentId]];
-            updated[commentId][idx] = response.data;
+          if (updated[id]) {
+            updated[id] = [...updated[id]];
+            updated[id][idx] = response.data;
           }
           return updated;
         });
-        
         setEditing(null);
         setEditDraft("");
       }
 
       
     } catch (error) {
-      console.log(error);
       console.error("Failed to save edit:", error);
     }
   };
 
-  const handleDelete = async (commentId, idx) => {
-    const reply = comments.find((c) => c.comment_id === commentId)?.replies?.[
+  const handleDelete = async (id, idx) => {
+    const reply = comments.find((c) => c.comment_id === id)?.replies?.[
       idx
     ];
     if (!reply) return;
@@ -155,7 +144,7 @@ const CommentsReplies = () => {
     // optimistic UI: remove it immediately
     setComments((prev) =>
       prev.map((c) =>
-        c.comment_id === commentId
+        c.comment_id === id
           ? { ...c, replies: (c.replies || []).filter((_, i) => i !== idx) }
           : c
       )
@@ -164,7 +153,7 @@ const CommentsReplies = () => {
     try {
       await axios.delete(
         `${BackendAPI}/comments/delete-reply/${
-          comments.find((c) => c.comment_id === commentId).replies[idx].reply_id
+          comments.find((c) => c.comment_id === id).replies[idx].reply_id
         }`,
         {
           headers: {
@@ -173,7 +162,6 @@ const CommentsReplies = () => {
         }
       );
     } catch (error) {
-      console.log(error);
       console.error("Failed to delete reply:", error);
     }
   };
@@ -270,10 +258,6 @@ const CommentsReplies = () => {
                       key={idx}
                       className="bg-gray-50 rounded-md p-3 text-sm text-gray-700"
                     >
-                      {/* <div className="flex justify-between">
-                        <p className="font-medium text-gray-800">Instructor Reply {idx + 1}:</p>
-                      </div> */}
-
                       {editing &&
                       editing.id === c.comment_id &&
                       editing.idx === idx ? (
@@ -334,9 +318,7 @@ const CommentsReplies = () => {
                         </>
                       )}
                     </div>
-                  ))}
-
-                  
+                  ))}  
                 </div>
               </div>
             </div>
