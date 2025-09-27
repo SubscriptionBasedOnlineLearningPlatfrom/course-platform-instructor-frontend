@@ -26,8 +26,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-
-
+    <>
       <div className='flex min-h-screen'>
         <aside className="w-72 flex-none border-r overflow-y-auto">
           <div className='w-full h-full'>
@@ -66,10 +65,7 @@ function App() {
           {/*<LearnerFeedbackCarousel/>temporily added for testing - insert component to the correct position of the dashboard */}
         </main>
       </div>
-
-
-
-
+    </>
   )
 
 }
