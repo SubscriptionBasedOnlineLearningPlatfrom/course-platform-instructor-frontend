@@ -46,7 +46,7 @@ const CreateCourse = () => {
       
       if (!token) {
         toast.error("Please login first");
-        navigate("/login");
+        navigate("/");
         return;
       }
 
