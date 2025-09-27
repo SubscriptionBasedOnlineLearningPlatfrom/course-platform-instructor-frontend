@@ -18,7 +18,7 @@ const courses = [
     students: 47,
     progress: 85,
     rating: 4.8,
-    status: "published"
+    // status: "published"
   },
   {
     id: "2",
@@ -26,7 +26,7 @@ const courses = [
     students: 32,
     progress: 65,
     rating: 4.9,
-    status: "published"
+    // status: "published"
   },
   {
     id: "3",
@@ -34,7 +34,7 @@ const courses = [
     students: 23,
     progress: 40,
     rating: 4.7,
-    status: "draft"
+    // status: "draft"
   }
 ];
 

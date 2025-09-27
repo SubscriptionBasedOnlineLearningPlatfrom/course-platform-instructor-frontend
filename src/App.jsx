@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 
 import LearnerFeedbackCarousel from './components/LearnerFeedbackCarousel';
 import ViewCreatedCourse from './components/course/ViewCreatedCourse';
+import ViewCreatedCourses from './pages/ViewCreatedCourses';
 import EnrollmentOverview from './components/enrollments/EnrollmentOverview';
 import CurriculumPage from './pages/Curriculum';
 import Pricing from './pages/Pricing'
@@ -58,6 +59,7 @@ function App() {
               <Route path="/courses" element={<ViewCreatedCourse />} />    
               <Route path="/CommentsReplies" element={<CommentsReplies />} />   
               <Route path="/create-course" element={<CreateCourse />} /> 
+              <Route path="/view-courses" element={<ViewCreatedCourses />} />
               <Route path="/learner" element={<LearnerFeedbackCarousel />} />{" "}
 
           </Routes>
