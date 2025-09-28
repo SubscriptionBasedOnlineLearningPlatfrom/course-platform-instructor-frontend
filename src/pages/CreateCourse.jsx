@@ -11,13 +11,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { courseAPI } from "../services/api";
 
 const courseSchema = z.object({
   title: z.string().min(1, "Course title is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   category: z.string().min(1, "Please select a category"),
   level: z.string().min(1, "Please select a level"),
-  price: z.string().min(1, "Price is required"),
   duration: z.string().min(1, "Duration is required"),
   requirements: z.string().optional(),
 });
@@ -33,7 +33,6 @@ const CreateCourse = () => {
       description: "",
       category: "",
       level: "",
-      price: "",
       duration: "",
       requirements: "",
     },
@@ -42,11 +41,26 @@ const CreateCourse = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Check if user is logged in
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        toast.error("Please login first");
+        navigate("/");
+        return;
+      }
+
+      // Send data to backend using API service
+      const result = await courseAPI.createCourse(data);
+
       toast.success("Course created successfully!");
-      navigate("/");
+      console.log("Created course:", result.data);
+      
+      // Navigate to view created courses page to see the new course
+      navigate("/view-courses");
     } catch (error) {
-      toast.error("Failed to create course. Please try again.");
+      console.error("Error creating course:", error);
+      toast.error(error.message || "Failed to create course. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -165,8 +179,8 @@ const CreateCourse = () => {
                   )}
                 />
 
-                {/* Level / Price / Duration */}
-                <div className="grid md:grid-cols-3 gap-6">
+                {/* Level / Duration */}
+                <div className="grid md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
                     name="level"
@@ -180,33 +194,14 @@ const CreateCourse = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="beginner">🌱 Beginner</SelectItem>
-                            <SelectItem value="intermediate">🚀 Intermediate</SelectItem>
-                            <SelectItem value="advanced">⚡ Advanced</SelectItem>
+                            <SelectItem value="Beginner">🌱 Beginner</SelectItem>
+                            <SelectItem value="Intermediate">🚀 Intermediate</SelectItem>
+                            <SelectItem value="Advanced">⚡ Advanced</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormItem>
                     )}
                   />
-
-                  {/* <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sky-700 font-semibold">Price (USD)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
-                            placeholder="99.00"
-                            {...field}
-                            className="h-12 rounded-xl bg-white/80 border-sky-200 focus:border-sky-400 focus:ring-2 focus:ring-sky-300"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  /> */}
 
                   <FormField
                     control={form.control}
@@ -259,7 +254,6 @@ const CreateCourse = () => {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    onClick={() => navigate("/ViewCreatedCourse")}
                     className="px-10 py-3 rounded-xl bg-gradient-to-r bg-blue-400 text-white font-semibold shadow-lg hover:opacity-90 transition animate-pulse"
                   >
                     {isSubmitting ? "Creating..." : "🚀 Launch Course"}

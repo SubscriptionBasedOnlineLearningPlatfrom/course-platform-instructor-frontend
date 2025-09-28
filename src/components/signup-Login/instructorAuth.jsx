@@ -45,7 +45,13 @@ export const InstructorAuth = () => {
       });
 
       const data = res.data;
-      if (data?.token) localStorage.setItem("token", data.token);
+      
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+      } else {
+        alert("❌ Login failed: No token received");
+        return;
+      }
 
       alert(`✅ ${mode === "login" ? "Logged in" : "Registered"} successfully!`);
       window.location.href = "/dashboard";
