@@ -164,7 +164,7 @@ export const InstructorAuth = () => {
       </Button>
 
       {/* Google Login */}
-     import { FcGoogle } from "react-icons/fc"
+    
 
 <div className="relative my-6">
   <Separator />
