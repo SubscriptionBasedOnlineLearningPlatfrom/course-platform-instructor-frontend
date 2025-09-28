@@ -18,7 +18,11 @@ const courseSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   category: z.string().min(1, "Please select a category"),
   level: z.string().min(1, "Please select a level"),
-  duration: z.string().min(1, "Duration is required"),
+  duration: z.string().optional().refine((val) => {
+    if (!val || val === "") return true; // Allow empty
+    const num = parseInt(val);
+    return !isNaN(num) && num > 0;
+  }, "Duration must be a positive number"),
   requirements: z.string().optional(),
 });
 
@@ -208,11 +212,12 @@ const CreateCourse = () => {
                     name="duration"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sky-700 font-semibold">Duration (hours)</FormLabel>
+                        <FormLabel className="text-sky-700 font-semibold">Duration (hours) <span className="text-gray-500 font-normal">(optional)</span></FormLabel>
                         <FormControl>
                           <Input
                             type="number"
-                            placeholder="25"
+                            min="1"
+                            placeholder="e.g., 25"
                             {...field}
                             className="h-12 rounded-xl bg-white/80 border-sky-200 focus:border-sky-400 focus:ring-2 focus:ring-sky-300"
                           />

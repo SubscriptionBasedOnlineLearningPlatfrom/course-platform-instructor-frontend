@@ -1,8 +1,10 @@
 import { Card } from "../dashboard1/ui/card.jsx";
 import { Button } from "../dashboard1/ui/button.jsx";
 import { Progress } from "../dashboard1/ui/progress.jsx";
-import { Users, BookOpen, Star, Plus, ArrowRight } from "lucide-react";
+import { Users, BookOpen, Star, Plus, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { courseAPI } from "../../services/api";
 
 const gradientColors = [
   "from-blue-500 to-indigo-600",
@@ -11,40 +13,73 @@ const gradientColors = [
   "from-purple-500 to-pink-600"
 ];
 
-const courses = [
-  {
-    id: "1",
-    title: "React Development Basics",
-    students: 47,
-    progress: 85,
-    rating: 4.8,
-    // status: "published"
-  },
-  {
-    id: "2",
-    title: "Advanced JavaScript",
-    students: 32,
-    progress: 65,
-    rating: 4.9,
-    // status: "published"
-  },
-  {
-    id: "3",
-    title: "Web Design Fundamentals",
-    students: 23,
-    progress: 40,
-    rating: 4.7,
-    // status: "draft"
-  }
-];
-
 export const CourseOverview = () => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchInstructorCourses();
+  }, []);
+
+  const fetchInstructorCourses = async () => {
+    try {
+      setLoading(true);
+      const result = await courseAPI.getInstructorCourses();
+      
+      // Transform the data to match the component's expected format
+      const transformedCourses = (result.data || []).map((course, index) => ({
+        id: course.course_id,
+        title: course.course_title,
+        students: Math.floor(Math.random() * 50) + 10, // Random for now, replace with real data
+        progress: Math.floor(Math.random() * 100), // Random for now, replace with real data  
+        rating: (4.5 + Math.random() * 0.5).toFixed(1), // Random 4.5-5.0 rating
+        description: course.course_description,
+        category: course.category,
+        level: course.level,
+        created_at: course.created_at
+      }));
+      
+      setCourses(transformedCourses);
+    } catch (err) {
+      console.error("Error fetching instructor courses:", err);
+      setError("Failed to load courses");
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) {
+    return (
+      <Card className="p-6 shadow-lg">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <span className="ml-2 text-gray-600">Loading your courses...</span>
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 shadow-lg">
+        <div className="text-center py-12">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={fetchInstructorCourses} variant="outline">
+            Try Again
+          </Button>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6 shadow-lg">
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Your Courses</h3>
+          <h3 className="text-lg font-semibold text-foreground">
+            Your Courses ({courses.length})
+          </h3>
           <Link to="/create-course">
             <Button size="sm" className="gap-2 shadow-md">
               <Plus className="h-4 w-4" />
@@ -53,9 +88,25 @@ export const CourseOverview = () => {
           </Link>
         </div>
 
-        {/* Courses List */}
-        <div className="space-y-4">
-          {courses.map((course, idx) => (
+        {/* Empty State */}
+        {courses.length === 0 ? (
+          <div className="text-center py-12 space-y-4">
+            <BookOpen className="h-16 w-16 text-gray-400 mx-auto" />
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700">No courses yet</h4>
+              <p className="text-gray-500 mt-2">Start creating your first course to share your knowledge!</p>
+            </div>
+            <Link to="/create-course">
+              <Button className="gap-2 mt-4">
+                <Plus className="h-4 w-4" />
+                Create Your First Course
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          /* Courses List */
+          <div className="space-y-4">
+            {courses.map((course, idx) => (
             <div
               key={course.id}
               className="flex items-center gap-4 p-5 rounded-xl border border-border bg-white/50 backdrop-blur-sm
@@ -126,7 +177,8 @@ export const CourseOverview = () => {
               </Link>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </Card>
   );
