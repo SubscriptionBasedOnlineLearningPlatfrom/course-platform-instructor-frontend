@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu, X, LogOut } from "lucide-react";
 import { Link } from "react-router-dom"; // <-- Added
 import logo from "../assets/logo.jpeg";
+import { logout } from "../utils/auth.js";
 
 const Sidebar = () => {
   const [courseOpen, setCourseOpen] = useState(false);
@@ -113,6 +114,21 @@ const Sidebar = () => {
             Comments & Replies
           </Link>
         </nav>
+
+        {/* Signout Button */}
+        <div className="p-4 border-t border-blue-300">
+          <button
+            onClick={() => {
+              if (window.confirm('Are you sure you want to sign out?')) {
+                logout();
+              }
+            }}
+            className="w-full py-2 px-3 rounded bg-red-700 hover:bg-red-800 text-white cursor-pointer transition text-center font-medium flex items-center justify-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </button>
+        </div>
       </div>
     </div>
   );
