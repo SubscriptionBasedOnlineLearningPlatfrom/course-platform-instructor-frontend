@@ -228,7 +228,7 @@ export const InstructorAuth = () => {
           <div className="mx-auto w-16 h-16">
             <img src={logo} alt="ProLearnX Logo" className="w-full h-full object-cover rounded-2xl shadow-xl" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-white">
             ProLearnX
           </h1>
         </div>
