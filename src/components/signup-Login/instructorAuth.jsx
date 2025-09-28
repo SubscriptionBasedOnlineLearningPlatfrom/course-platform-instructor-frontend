@@ -48,6 +48,10 @@ export const InstructorAuth = () => {
       
       if (data?.token) {
         localStorage.setItem("token", data.token);
+        
+        // Store user data directly from API response
+        const userData = data.user || { username, email };
+        localStorage.setItem("user", JSON.stringify(userData));
       } else {
         alert("❌ Login failed: No token received");
         return;
@@ -213,7 +217,7 @@ export const InstructorAuth = () => {
           <div className="mx-auto w-16 h-16">
             <img src={logo} alt="ProLearnX Logo" className="w-full h-full object-cover rounded-2xl shadow-xl" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent text-white">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
             ProLearnX
           </h1>
         </div>
