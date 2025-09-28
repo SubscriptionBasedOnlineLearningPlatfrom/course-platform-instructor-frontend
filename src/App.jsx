@@ -1,49 +1,36 @@
+import React from "react";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Sidebar from "./components/Sidebar";
 
-import React from 'react';
-import { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Sidebar from './components/Sidebar';
-
-import LearnerFeedbackCarousel from './components/LearnerFeedbackCarousel';
-import ViewCreatedCourse from './components/course/ViewCreatedCourse';
-import ViewCreatedCourses from './pages/ViewCreatedCourses';
-import EnrollmentOverview from './components/enrollments/EnrollmentOverview';
-import CurriculumPage from './pages/Curriculum';
-import Pricing from './pages/Pricing'
-import QuizCreation from './components/quizes/QuizCreation';
-import CommentsReplies from './components/comments/CommentsReplies';
-import Dashboard from './pages/Dashboard';
-import CreateCourse from './pages/CreateCourse';
-import Signup_Login from './pages/Signup_Login'; // Assuming this is the correct path
+import LearnerFeedbackCarousel from "./components/LearnerFeedbackCarousel";
+import ViewCreatedCourse from "./components/course/ViewCreatedCourse";
+import EnrollmentOverview from "./components/enrollments/EnrollmentOverview";
+import CurriculumPage from "./pages/Curriculum";
+import Pricing from "./pages/Pricing";
+import QuizCreation from "./components/quizes/QuizCreation";
+import CommentsReplies from "./components/comments/CommentsReplies";
+import Dashboard from "./pages/Dashboard";
+import CreateCourse from "./pages/CreateCourse";
+import Signup_Login from "./pages/Signup_Login"; // Assuming this is the correct path
 import UpdatePassword from "./pages/UpdatePassword";
-
-
-
-
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
-      <div className='flex min-h-screen'>
-        <aside className="w-72 flex-none border-r overflow-y-auto">
-          <div className='w-full h-full'>
-            <Sidebar />
-          </div>
-          
-        </aside>
-        
-        <main className="flex-1 overflow-y-auto p-6">
-
-          <Routes>
+    <div className="flex min-h-screen">
+      <aside className="w-72 flex-none border-r overflow-y-auto">
+        <div className="w-full h-full">
+          <Sidebar />
+        </div>
+      </aside>
+      <main className="flex-1 overflow-y-auto p-6">
+        <Routes>
           <Route path="/" element={<Signup_Login />} />
-
-          <Route path="/dashboard" element={<Dashboard />} />  
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/update-password" element={<UpdatePassword />} />
-
-
               {/* <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/students" element={<Students />} />  */}
               <Route

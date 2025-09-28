@@ -34,7 +34,6 @@ const ViewCreatedCourse = () => {
           setCourses(Object.values(response.data));
         }
 
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -49,7 +48,7 @@ const ViewCreatedCourse = () => {
       course.course_description.toLowerCase().includes(search.toLowerCase())
   );
 
-  // --------- handlers ----------
+
   const handleDelete = (id) => {
     if (!confirm("Delete this course? This cannot be undone.")) return;
     setCourses((prev) => prev.filter((c) => c.id !== id));
@@ -273,7 +272,7 @@ const ViewCreatedCourse = () => {
         </div>
       )}
 
-      {/* ---------- Edit Modal ---------- */}
+      {/* Edit Modal */}
       {editingId !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6">
