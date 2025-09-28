@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp, Menu, X, LogOut } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu, X, LogOut, User } from "lucide-react";
 import { Link } from "react-router-dom"; // <-- Added
 import logo from "../assets/logo.jpeg";
 import { logout } from "../utils/auth.js";
@@ -58,6 +58,15 @@ const Sidebar = () => {
             className="block py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
           >
             Dashboard
+          </Link>
+
+          {/* Instructor Details */}
+          <Link
+            to="/instructor-details"
+            className="flex items-center gap-2 mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
+            <User className="h-4 w-4" />
+            My Profile
           </Link>
 
           {/* Course Management */}
