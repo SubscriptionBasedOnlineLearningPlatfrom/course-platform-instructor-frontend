@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../signup-Login2/ui/ta
 import { Separator } from "../signup-Login2/ui/separator.jsx";
 import { Lock, User, BookOpen, Mail } from "lucide-react";
 import axios from "axios";
+import { FcGoogle } from "react-icons/fc"
+
 
 axios.defaults.withCredentials = true;
 const API_BASE = "http://localhost:4000";
@@ -162,15 +164,24 @@ export const InstructorAuth = () => {
       </Button>
 
       {/* Google Login */}
-      <div className="relative my-6">
-        <Separator />
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-        </div>
-        <Button variant="outline" className="w-full mt-4 flex items-center justify-center gap-2" type="button" onClick={handleGoogleLogin}>
-          Continue with Google
-        </Button>
-      </div>
+     import { FcGoogle } from "react-icons/fc"
+
+<div className="relative my-6">
+  <Separator />
+  <div className="relative flex justify-center text-xs uppercase">
+    <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+  </div>
+  <Button
+    variant="outline"
+    className="w-full mt-4 flex items-center justify-center gap-2"
+    type="button"
+    onClick={handleGoogleLogin}
+  >
+    <FcGoogle className="w-5 h-5" />
+    Continue with Google
+  </Button>
+</div>
+
 
       {/* Forgot Password */}
       {mode === "login" && (
