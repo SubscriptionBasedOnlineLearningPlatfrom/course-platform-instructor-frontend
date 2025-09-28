@@ -95,7 +95,11 @@ const addAssignment = async (lessonId, file) => {
 };
 
 
-// resourse delete is not done?
+// delete file-3 types
+const deleteFile = async (lessonId, type) => {
+  const response = await api.delete(`/instructor/chapters/${lessonId}/${type}`);
+  return response.data;
+};
 
 
 
@@ -120,6 +124,7 @@ export const ApiProvider = ({ children }) => {
         addVideo,
         addNote,
         addAssignment,
+        deleteFile,
 
       }}
     >

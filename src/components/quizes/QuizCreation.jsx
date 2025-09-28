@@ -30,9 +30,7 @@ const QuizCreation = () => {
           }))
         );
       }
-      console.log(response.data.questions);
     } catch (error) {
-      console.log(error);
       console.error("Error fetching quiz data:", error);
     }
   }, [lessonId]);
@@ -52,7 +50,6 @@ const QuizCreation = () => {
     e.preventDefault();
     if (currentAnswer.trim() === "") return;
     setAnswers((prev) => [...prev, currentAnswer]);
-    console.log(answers);
     setCurrentAnswer("");
   };
 
@@ -90,7 +87,6 @@ const QuizCreation = () => {
 
   // Save question with answers
   const saveAllQuestions = async () => {
-    console.log(quiz[0].answers);
     if (quiz.length === 0) return;
 
     try {
@@ -106,17 +102,12 @@ const QuizCreation = () => {
         })),
       });
 
-      console.log(response);
-      console.log(lessonId);
-
       if (response.status === 201) {
-        console.log("Question saved successfully:", response.data);
         setQuestion("");
         setAnswers([]);
         setCorrectAnswerIndex(null);
       }
     } catch (error) {
-      console.log(error);
       console.error("Error saving question:", error);
     }
   };

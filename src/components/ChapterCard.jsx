@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../contexts/APIContext";
 
 export default function ChapterCard({ chapter, onUpdateChapter }) {
-  const { addVideo, addNote, addAssignment } = useApi();
+  const { addVideo, addNote, addAssignment, deleteFile } = useApi();
 
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
       ? { id: "video", type: "Video", name: chapter.video_name || getOriginalName(chapter.video_url) }
       : null,
     chapter.note_url
-      ? { id: "note", type: "Notes", name: chapter.note_name || getOriginalName(chapter.note_url) }
+      ? { id: "note", type: "Note", name: chapter.note_name || getOriginalName(chapter.note_url) }
       : null,
     chapter.assignment_url
       ? { id: "assignment", type: "Assignment", name: chapter.assignment_name || getOriginalName(chapter.assignment_url) }
@@ -43,7 +43,7 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
           const res = await addVideo(chapter.lesson_id, file);
           uploadedUrl = res.lesson.video_url;
           uploadedName = getOriginalName(uploadedUrl);
-        } else if (type === "Notes") {
+        } else if (type === "Note") {
           const res = await addNote(chapter.lesson_id, file);
           uploadedUrl = res.lesson.note_url;
           uploadedName = getOriginalName(uploadedUrl);
@@ -66,7 +66,7 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
       if (type === "Video") {
         updatedChapter.video_url = uploadedUrl;
         updatedChapter.video_name = uploadedName;
-      } else if (type === "Notes") {
+      } else if (type === "Note") {
         updatedChapter.note_url = uploadedUrl;
         updatedChapter.note_name = uploadedName;
       } else if (type === "Assignment") {
@@ -80,7 +80,7 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
     input.click();
   };
 
-  const handleDeleteResource = (res) => {
+  const handleDeleteResource = async (res) => {
     if (!window.confirm("Are you sure you want to delete this file?")) return;
 
     setResources((prev) => prev.filter((r) => r.id !== res.id));
@@ -89,13 +89,21 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
     if (res.type === "Video") {
       updatedChapter.video_url = null;
       updatedChapter.video_name = null;
-    } else if (res.type === "Notes") {
+    } else if (res.type === "Note") {
       updatedChapter.note_url = null;
       updatedChapter.note_name = null;
     } else if (res.type === "Assignment") {
       updatedChapter.assignment_url = null;
       updatedChapter.assignment_name = null;
     }
+
+  try {
+    await deleteFile(chapter.lesson_id, res.type); //await the API call
+  } catch (err) {
+    alert("Failed to delete file: " + err.message);
+    setResources((prev) => [...prev, res]);// revert state if deletion fails
+    return;
+  }
 
     if (onUpdateChapter) onUpdateChapter(updatedChapter);
   };
@@ -118,15 +126,15 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
         </button>
 
         <button
-          onClick={() => handleAddResource("Notes")}
-          disabled={resources.some((r) => r.type === "Notes")}
+          onClick={() => handleAddResource("Note")}
+          disabled={resources.some((r) => r.type === "Note")}
           className={`px-3 py-1 rounded transition cursor-pointer ${
-            resources.some((r) => r.type === "Notes")
+            resources.some((r) => r.type === "Note")
               ? "bg-gray-300 text-gray-700 cursor-not-allowed"
               : "bg-blue-600 text-white hover:bg-blue-700"
           }`}
         >
-          Add Notes
+          Add Note
         </button>
 
         <button
