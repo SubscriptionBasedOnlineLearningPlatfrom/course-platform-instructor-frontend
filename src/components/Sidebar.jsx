@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronDown, ChevronUp, Menu, X, LogOut, User } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ChevronDown, ChevronUp, Menu, X, LogOut, User, LogIn } from "lucide-react";
 import { Link } from "react-router-dom"; // <-- Added
 import logo from "../assets/logo.jpeg";
 import { logout } from "../utils/auth.js";
@@ -7,6 +7,36 @@ import { logout } from "../utils/auth.js";
 const Sidebar = () => {
   const [courseOpen, setCourseOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check authentication status
+    const checkAuthStatus = () => {
+      const storedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const now = Date.now() / 1000;
+          if (payload.exp && payload.exp > now) {
+            setIsLoggedIn(true);
+            return;
+          }
+        } catch (error) {
+          console.error('Error decoding token:', error);
+        }
+      }
+      
+      setIsLoggedIn(!!storedUser);
+    };
+
+    checkAuthStatus();
+    
+    // Listen for storage changes (login/logout)
+    window.addEventListener('storage', checkAuthStatus);
+    return () => window.removeEventListener('storage', checkAuthStatus);
+  }, []);
 
   return (
     <div className="flex">
@@ -60,83 +90,99 @@ const Sidebar = () => {
             Dashboard
           </Link>
 
-          {/* Instructor Details */}
-          <Link
-            to="/instructor-details"
-            className="flex items-center gap-2 mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            <User className="h-4 w-4" />
-            My Profile
-          </Link>
-
-          {/* Course Management */}
-          <div className="mt-4">
-            <div
-              className="flex justify-between items-center py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
-              onClick={() => setCourseOpen(!courseOpen)}
+          {/* Conditional Navigation based on login status */}
+          {isLoggedIn ? (
+            <Link
+              to="/instructor-details"
+              className="flex items-center gap-2 mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
             >
-              <span>Course Management</span>
-              {courseOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </div>
-            {courseOpen && (
-              <div className="pl-6 mt-2 space-y-1 text-left">
-                <Link
-                  to="/create-course"
-                  className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+              <User className="h-4 w-4" />
+              My Profile
+            </Link>
+          ) : null}
+
+          {/* Instructor-only features */}
+          {isLoggedIn ? (
+            <>
+              {/* Course Management */}
+              <div className="mt-4">
+                <div
+                  className="flex justify-between items-center py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                  onClick={() => setCourseOpen(!courseOpen)}
                 >
-                  Add Course
-                </Link>
-                <Link
-                  to="/courses"
-                  className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
-                >
-                  Course List
-                </Link>
+                  <span>Course Management</span>
+                  {courseOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </div>
+                {courseOpen && (
+                  <div className="pl-6 mt-2 space-y-1 text-left">
+                    <Link
+                      to="/create-course"
+                      className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                    >
+                      Add Course
+                    </Link>
+                    <Link
+                      to="/courses"
+                      className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                    >
+                      Course List
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Student Management */}
-          <Link
-            to="/EnrollmentOverview"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Show Enrolled Students
-          </Link>
+              {/* Student Management */}
+              <Link
+                to="/EnrollmentOverview"
+                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+              >
+                Show Enrolled Students
+              </Link>
 
-          <Link
-            to="/pricing"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Pricing
-          </Link>
-          {/* <Link
-            to="/pricing"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Pricing
-          </Link> */}
-          <Link
-            to="/CommentsReplies"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Comments & Replies
-          </Link>
+              <Link
+                to="/pricing"
+                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+              >
+                Pricing
+              </Link>
+
+              <Link
+                to="/CommentsReplies"
+                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+              >
+                Comments & Replies
+              </Link>
+            </>
+          ) : (
+            <div className="mt-8 p-4 bg-blue-50 rounded-lg text-center">
+              <p className="text-blue-700 mb-2">Please login to access instructor features</p>
+            </div>
+          )}
         </nav>
 
-        {/* Signout Button */}
+        {/* Authentication Button */}
         <div className="p-4 border-t border-blue-300">
-          <button
-            onClick={() => {
-              if (window.confirm('Are you sure you want to sign out?')) {
-                logout();
-              }
-            }}
-            className="w-full py-2 px-3 rounded bg-red-700 hover:bg-red-800 text-white cursor-pointer transition text-center font-medium flex items-center justify-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </button>
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                if (window.confirm('Are you sure you want to sign out?')) {
+                  logout();
+                }
+              }}
+              className="w-full py-2 px-3 rounded bg-red-700 hover:bg-red-800 text-white cursor-pointer transition text-center font-medium flex items-center justify-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </button>
+          ) : (
+            <Link
+              to="/"
+              className="w-full py-2 px-3 rounded bg-green-600 hover:bg-green-700 text-white cursor-pointer transition text-center font-medium flex items-center justify-center gap-2"
+            >
+              <LogIn className="h-4 w-4" />
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>

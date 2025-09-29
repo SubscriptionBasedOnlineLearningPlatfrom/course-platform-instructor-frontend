@@ -79,6 +79,10 @@ const InstructorDetails = () => {
         coursesData = response.data.data || [];
       } catch (error) {
         console.error('Error fetching courses:', error);
+        if (error.message === 'Unauthorized' || error.message === 'Something went wrong') {
+          // Handle unauthorized access - user might not be logged in
+          console.log('User not authorized to access courses data');
+        }
         coursesData = [];
       }
 

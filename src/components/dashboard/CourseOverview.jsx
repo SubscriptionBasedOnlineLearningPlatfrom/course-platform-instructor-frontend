@@ -43,7 +43,11 @@ export const CourseOverview = () => {
       setCourses(transformedCourses);
     } catch (err) {
       console.error("Error fetching instructor courses:", err);
-      setError("Failed to load courses");
+      if (err.message === "Unauthorized") {
+        setError("Please login to view your courses");
+      } else {
+        setError("Failed to load courses");
+      }
     } finally {
       setLoading(false);
     }
