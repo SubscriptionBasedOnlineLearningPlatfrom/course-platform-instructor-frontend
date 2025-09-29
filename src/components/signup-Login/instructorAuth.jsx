@@ -18,7 +18,6 @@ const API_BASE = "http://localhost:4000";
 export const InstructorAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showResetForm, setShowResetForm] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
 
   const handleSubmit = async (e, mode) => {
     e.preventDefault();
@@ -78,13 +77,20 @@ export const InstructorAuth = () => {
   };
 
   const handleResetPasswordRequest = async () => {
-    if (!resetEmail) return alert("Enter your email");
+    // Get email from the main form
+    const form = document.querySelector('form');
+    const formData = new FormData(form);
+    const email = formData.get('email');
+
+    if (!email) {
+      alert("Please enter your email address in the form above first");
+      return;
+    }
 
     try {
-      await axios.post(`${API_BASE}/auth/reset-password`, { email: resetEmail });
-      alert("📩 Reset link sent to your email!");
+      await axios.post(`${API_BASE}/auth/reset-password`, { email: email });
+      alert(`📩 Password reset link sent to ${email}!`);
       setShowResetForm(false);
-      setResetEmail("");
     } catch (err) {
       alert(`❌ ${err?.response?.data?.error || err.message}`);
     }
@@ -195,18 +201,13 @@ export const InstructorAuth = () => {
           </button>
 
           {showResetForm && (
-            <div className="space-y-3 mt-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-                className="w-full border rounded p-2"
-                required
-              />
+            <div className="space-y-3 mt-3 p-3 bg-secondary/30 rounded border">
+              <p className="text-sm text-muted-foreground">
+                Reset link will be sent to the email address entered above
+              </p>
               <button
                 type="button"
-                className="w-full bg-sky-700 text-white py-2 rounded"
+                className="w-full bg-sky-700 text-white py-2 rounded hover:bg-sky-800 transition-colors"
                 onClick={handleResetPasswordRequest}
               >
                 Send Reset Link
@@ -228,7 +229,7 @@ export const InstructorAuth = () => {
           <div className="mx-auto w-16 h-16">
             <img src={logo} alt="ProLearnX Logo" className="w-full h-full object-cover rounded-2xl shadow-xl" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-white">
             ProLearnX
           </h1>
         </div>
