@@ -1,5 +1,5 @@
 import { Card, CardContent } from "../dashboard1/ui/card.jsx";
-import { Mail, User, LogOut, Eye } from "lucide-react";
+import { Mail, User, LogOut, Eye, LogIn } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../../utils/auth.js";
@@ -7,6 +7,7 @@ import { logout } from "../../utils/auth.js";
 export const ProfileCard = () => {
   const [userName, setUserName] = useState("Guest");
   const [userEmail, setUserEmail] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Get user data from localStorage or decode from token
@@ -18,18 +19,37 @@ export const ProfileCard = () => {
         const userData = JSON.parse(storedUser);
         setUserName(userData.username || userData.name || userData.email || "Instructor");
         setUserEmail(userData.email || "");
+        setIsLoggedIn(true);
       } catch (error) {
         console.error("Error parsing user data:", error);
+        setIsLoggedIn(false);
       }
     } else if (token) {
       // If no stored user but we have a token, try to decode it
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        
+        // Check if token is expired
+        const now = Date.now() / 1000;
+        if (payload.exp && payload.exp < now) {
+          console.log("Token expired, clearing localStorage");
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setIsLoggedIn(false);
+          return;
+        }
+        
         setUserName(payload.username || payload.name || "Instructor");
         setUserEmail(payload.email || "");
+        setIsLoggedIn(true);
       } catch (error) {
         console.error("Error decoding token:", error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false);
       }
+    } else {
+      setIsLoggedIn(false);
     }
   }, []);
 
@@ -49,25 +69,37 @@ export const ProfileCard = () => {
         
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
-          <Link
-            to="/instructor-details"
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-          >
-            <Eye className="h-4 w-4" />
-            View Details
-          </Link>
-          
-          <button
-            onClick={() => {
-              if (window.confirm('Are you sure you want to sign out?')) {
-                logout();
-              }
-            }}
-            className="px-6 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </button>
+          {isLoggedIn ? (
+            <>
+              <Link
+                to="/instructor-details"
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                View Details
+              </Link>
+              
+              <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to sign out?')) {
+                    logout();
+                  }
+                }}
+                className="px-6 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/"
+              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+              <LogIn className="h-4 w-4" />
+              Login
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
