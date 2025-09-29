@@ -76,10 +76,22 @@ export default function UpdatePassword() {
     e.preventDefault()
     if (!token) return alert("Missing reset token.")
     try {
-      await axios.post("http://localhost:4000/auth/update-password", {
+      const response = await axios.post("http://localhost:4000/auth/update-password", {
         token, newPassword
       })
-      alert("✅ Password updated successfully!")
+      
+      const { data } = response
+      
+      // If backend returns login token and user data, store them
+      if (data?.token && data?.user) {
+        localStorage.setItem("token", data.token)
+        localStorage.setItem("user", JSON.stringify(data.user))
+        alert(`✅ Password updated successfully! Welcome back, ${data.user.username}!`)
+      } else {
+        alert("✅ Password updated successfully!")
+      }
+      
+      // Redirect to dashboard
       window.location.href = "/dashboard"
     } catch (err) {
       alert(`❌ ${err.response?.data?.error || err.message}`)
