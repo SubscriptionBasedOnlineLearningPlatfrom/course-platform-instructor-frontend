@@ -33,24 +33,30 @@ function App() {
           <Route path="/" element={<Signup_Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/update-password" element={<UpdatePassword />} />
-          <Route
-            path="/courses/:courseId/curriculum"
-            element={<CurriculumPage />}
-          />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/ViewCreatedCourse" element={<ViewCreatedCourse />} />
-          {/* <Route path="/add-course" element={<AddCourse />} /> */}
-          <Route path="/EnrollmentOverview" element={<EnrollmentOverview />} />
-          <Route path="/QuizCreation" element={<QuizCreation />} />
-          <Route path="/courses" element={<ViewCreatedCourse />} />
-          <Route path="/CommentsReplies" element={<CommentsReplies />} />
-          <Route path="/create-course" element={<CreateCourse />} />
-          <Route path="/learner" element={<LearnerFeedbackCarousel />} />{" "}
-        </Routes>
-        {/*<LearnerFeedbackCarousel/>temporily added for testing - insert component to the correct position of the dashboard */}
-      </main>
-    </div>
-  );
+              {/* <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/students" element={<Students />} />  */}
+              <Route
+                path="/courses/:courseId/curriculum"
+                element={<CurriculumPage />}
+              />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/ViewCreatedCourse" element={<ViewCreatedCourse />} />
+              {/* <Route path="/add-course" element={<AddCourse />} /> */}
+              <Route path="/EnrollmentOverview" element={<EnrollmentOverview />} />
+              <Route path="/QuizCreation" element={<QuizCreation />} /> 
+              <Route path="/courses" element={<ViewCreatedCourse />} />    
+              <Route path="/CommentsReplies" element={<CommentsReplies />} />   
+              <Route path="/create-course" element={<CreateCourse />} /> 
+              <Route path="/view-courses" element={<ViewCreatedCourses />} />
+              <Route path="/learner" element={<LearnerFeedbackCarousel />} />{" "}
+
+          </Routes>
+          {/*<LearnerFeedbackCarousel/>temporily added for testing - insert component to the correct position of the dashboard */}
+        </main>
+      </div>
+    </>
+  )
+
 }
 
 export default App;

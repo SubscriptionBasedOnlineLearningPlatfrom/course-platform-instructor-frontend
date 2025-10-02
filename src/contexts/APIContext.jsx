@@ -55,6 +55,53 @@ const deleteChapter = async (lessonId) => {
 };
 
 
+// =======================
+// FILE UPLOAD API
+// =======================
+const addVideo = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file); // key must be 'file'
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/video`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } } //ensures the actual file is sent, not just the file name
+  );
+  return response.data;
+};
+
+const addNote = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/note`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return response.data;
+};
+
+const addAssignment = async (lessonId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    `/instructor/chapters/${lessonId}/assignment`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return response.data;
+};
+
+
+// delete file-3 types
+const deleteFile = async (lessonId, type) => {
+  const response = await api.delete(`/instructor/chapters/${lessonId}/${type}`);
+  return response.data;
+};
+
+
 
 // =======================
 // CONTEXT
@@ -74,6 +121,11 @@ export const ApiProvider = ({ children }) => {
         deleteModule,
         addChapter,
         deleteChapter,
+        addVideo,
+        addNote,
+        addAssignment,
+        deleteFile,
+
       }}
     >
       {children}
