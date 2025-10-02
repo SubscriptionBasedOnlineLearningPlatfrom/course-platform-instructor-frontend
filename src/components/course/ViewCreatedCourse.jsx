@@ -5,6 +5,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdDoubleArrow } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../contexts/APIContext";
+import { toast } from "react-toastify";
 
 const ViewCreatedCourse = () => {
   const { BackendAPI } = useApi();
@@ -33,7 +34,6 @@ const ViewCreatedCourse = () => {
         if (response.status === 200) {
           setCourses(Object.values(response.data));
         }
-
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -47,7 +47,6 @@ const ViewCreatedCourse = () => {
       course.course_title.toLowerCase().includes(search.toLowerCase()) ||
       course.course_description.toLowerCase().includes(search.toLowerCase())
   );
-
 
   const handleDelete = (id) => {
     if (!confirm("Delete this course? This cannot be undone.")) return;
@@ -75,24 +74,36 @@ const ViewCreatedCourse = () => {
         !course_title.trim() ||
         !course_description.trim() ||
         !category.trim()
-      )
+      ) {
+        toast.error("All fields are required");
         return;
+      }
 
       const today = new Date().toISOString().slice(0, 10);
 
-      const updatedCourse = await axios.put(`${BackendAPI}/overview/edit-course-details/${courseId}`,{
-        course_title,
-        course_description,
-        category
-      });
+      const updatedCourse = await axios.put(
+        `${BackendAPI}/overview/edit-course-details/${courseId}`,
+        {
+          course_title,
+          course_description,
+          category,
+        }
+      );
 
+      if (updatedCourse.status === 200) {
+        toast.success("Course updated successfully");
+      }
       setCourses((prev) =>
-        prev.map((c) => (c.course_id === editingId ? { ...c, ...updatedCourse } : c))
+        prev.map((c) =>
+          c.course_id === editingId ? { ...c, ...updatedCourse } : c
+        )
       );
 
       cancelEdit();
-
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+      toast.error("Something went wrong while updating");
+    }
   };
 
   return (
@@ -298,7 +309,10 @@ const ViewCreatedCourse = () => {
                   className="mt-1 w-full border rounded-lg p-2"
                   value={form.course_description}
                   onChange={(e) =>
-                    setForm((f) => ({ ...f, course_description: e.target.value }))
+                    setForm((f) => ({
+                      ...f,
+                      course_description: e.target.value,
+                    }))
                   }
                 />
               </div>

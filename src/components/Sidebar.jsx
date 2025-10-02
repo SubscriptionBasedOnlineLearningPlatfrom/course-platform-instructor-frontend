@@ -37,7 +37,7 @@ const Sidebar = () => {
             className="text-xl font-bold"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
-            PROLEARNX
+            ProLearnX
           </span>
 
           {/* Close button for mobile */}
@@ -93,19 +93,6 @@ const Sidebar = () => {
           >
             Show Enrolled Students
           </Link>
-
-          <Link
-            to="/pricing"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Pricing
-          </Link>
-          {/* <Link
-            to="/pricing"
-            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-          >
-            Pricing
-          </Link> */}
           <Link
             to="/CommentsReplies"
             className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"

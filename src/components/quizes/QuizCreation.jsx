@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import { useApi } from "../../contexts/APIContext";
+import { toast } from "react-toastify";
 
 const QuizCreation = () => {
   const [question, setQuestion] = useState("");
@@ -106,8 +107,10 @@ const QuizCreation = () => {
         setQuestion("");
         setAnswers([]);
         setCorrectAnswerIndex(null);
+        toast.success("Quiz created successfully!")
       }
     } catch (error) {
+      toast.error(error.message);
       console.error("Error saving question:", error);
     }
   };
@@ -131,17 +134,17 @@ const QuizCreation = () => {
   };
 
   // Download quiz as JSON
-  const downloadQuiz = () => {
-    const dataStr = JSON.stringify(quiz, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-    const exportFileDefaultName = "quiz.json";
+  // const downloadQuiz = () => {
+  //   const dataStr = JSON.stringify(quiz, null, 2);
+  //   const dataUri =
+  //     "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+  //   const exportFileDefaultName = "quiz.json";
 
-    const linkElement = document.createElement("a");
-    linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", exportFileDefaultName);
-    linkElement.click();
-  };
+  //   const linkElement = document.createElement("a");
+  //   linkElement.setAttribute("href", dataUri);
+  //   linkElement.setAttribute("download", exportFileDefaultName);
+  //   linkElement.click();
+  // };
 
   // Import quiz from JSON file
   const importQuiz = (event) => {
