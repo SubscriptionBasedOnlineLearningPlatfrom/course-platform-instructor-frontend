@@ -47,7 +47,6 @@ export const InstructorAuth = () => {
       const data = res.data;
       if (data?.token) localStorage.setItem("token", data.token);
 
-      alert(`✅ ${mode === "login" ? "Logged in" : "Registered"} successfully!`);
       window.location.href = "/dashboard";
     } catch (err) {
       const message =

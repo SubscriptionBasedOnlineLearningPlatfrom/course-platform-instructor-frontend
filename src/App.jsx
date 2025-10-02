@@ -15,18 +15,20 @@ import Dashboard from "./pages/Dashboard";
 import CreateCourse from "./pages/CreateCourse";
 import Signup_Login from "./pages/Signup_Login"; // Assuming this is the correct path
 import UpdatePassword from "./pages/UpdatePassword";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-72 flex-none border-r overflow-y-auto">
+      <aside className="w-64 flex-none border-r overflow-y-auto">
         <div className="w-full h-full">
           <Sidebar />
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto ">
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<Signup_Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
