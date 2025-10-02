@@ -8,26 +8,29 @@ import LearnerFeedbackCarousel from "./components/LearnerFeedbackCarousel";
 import ViewCreatedCourse from "./pages/ViewCreatedCourses";
 import EnrollmentOverview from "./components/enrollments/EnrollmentOverview";
 import CurriculumPage from "./pages/Curriculum";
-import Pricing from "./pages/Pricing";
 import QuizCreation from "./components/quizes/QuizCreation";
 import CommentsReplies from "./components/comments/CommentsReplies";
 import Dashboard from "./pages/Dashboard";
 import CreateCourse from "./pages/CreateCourse";
 import Signup_Login from "./pages/Signup_Login"; // Assuming this is the correct path
 import UpdatePassword from "./pages/UpdatePassword";
+import { ToastContainer } from "react-toastify";
+import ViewCreatedCourses from "./components/course/ViewCreatedCourse";
 import InstructorDetails from './components/instructor/InstructorDetails';
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
+    <>
     <div className="flex min-h-screen">
-      <aside className="w-72 flex-none border-r overflow-y-auto">
+      <aside className="w-64 flex-none border-r overflow-y-auto">
         <div className="w-full h-full">
           <Sidebar />
         </div>
       </aside>
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto ">
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<Signup_Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -42,7 +45,6 @@ function App() {
                 path="/courses/:courseId/curriculum"
                 element={<CurriculumPage />}
               />
-              <Route path="/pricing" element={<Pricing />} />
               <Route path="/ViewCreatedCourse" element={<ViewCreatedCourse />} />
               {/* <Route path="/add-course" element={<AddCourse />} /> */}
               <Route path="/EnrollmentOverview" element={<EnrollmentOverview />} />

@@ -68,7 +68,7 @@ const Sidebar = () => {
             className="text-xl font-bold"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
-            PROLEARNX
+            ProLearnX
           </span>
 
           {/* Close button for mobile */}
@@ -131,33 +131,20 @@ const Sidebar = () => {
                 )}
               </div>
 
-              {/* Student Management */}
-              <Link
-                to="/EnrollmentOverview"
-                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-              >
-                Show Enrolled Students
-              </Link>
+          {/* Student Management */}
+          <Link
+            to="/EnrollmentOverview"
+            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
+            Show Enrolled Students
+          </Link>
+          <Link
+            to="/CommentsReplies"
+            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
+            Comments & Replies
+          </Link>
 
-              <Link
-                to="/pricing"
-                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-              >
-                Pricing
-              </Link>
-
-              <Link
-                to="/CommentsReplies"
-                className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
-              >
-                Comments & Replies
-              </Link>
-            </>
-          ) : (
-            <div className="mt-8 p-4 bg-blue-50 rounded-lg text-center">
-              <p className="text-blue-700 mb-2">Please login to access instructor features</p>
-            </div>
-          )}
         </nav>
 
         {/* Authentication Button */}

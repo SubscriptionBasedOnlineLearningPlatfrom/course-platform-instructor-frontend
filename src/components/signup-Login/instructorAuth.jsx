@@ -58,7 +58,6 @@ export const InstructorAuth = () => {
         return;
       }
 
-      alert(`✅ ${mode === "login" ? "Logged in" : "Registered"} successfully!`);
       window.location.href = "/dashboard";
     } catch (err) {
       const message =
