@@ -16,6 +16,7 @@ import CreateCourse from "./pages/CreateCourse";
 import Signup_Login from "./pages/Signup_Login"; // Assuming this is the correct path
 import UpdatePassword from "./pages/UpdatePassword";
 import InstructorDetails from './components/instructor/InstructorDetails';
+import Profile from "./pages/Profile";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Signup_Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/instructor-details" element={<InstructorDetails />} />
 
