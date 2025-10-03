@@ -43,8 +43,6 @@ const QuizEditor = () => {
         const res = await axios.get(`${BackendAPI}/quizzes/${lessonId}`);
         const data = res.data;
 
-        console.log(data);
-
         setQuizTitle(data.quiz[0].quiz_title ?? "");
         // normalize to our structure (strip backend variations)
         const normalized = (data || []).full.map((q) => ({
@@ -174,7 +172,6 @@ const QuizEditor = () => {
     // Optimistically update UI
     setQuestions((prev) => prev.filter((_, i) => i !== index));
     toast.success("Deleted the question successfully");
-    console.log(questionId);
     try {
       if (questionId) {
         await axios.delete(
@@ -285,9 +282,7 @@ const QuizEditor = () => {
     toast.success("Downloaded successfully");
   };
 
-  useEffect(() => {
-    console.log(questions);
-  }, [questions]);
+  
 
   // Simple UI helpers
   const addBlankAnswer = (qIndex) =>
