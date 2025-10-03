@@ -7,7 +7,12 @@ export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   localStorage.removeItem('instructorProfileImages'); // Clear cached profile images
-  window.location.href = '/';
+  
+  // Trigger storage event to update all tabs
+  window.dispatchEvent(new Event('storage'));
+  
+  // Reload the page to reset the app state
+  window.location.reload();
 };
 
 export const requireAuth = () => {
