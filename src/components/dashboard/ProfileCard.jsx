@@ -22,7 +22,37 @@ export const ProfileCard = () => {
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        setUserName(userData.username || userData.name || userData.email || "Instructor");
+        console.log("Stored user data:", userData);
+        
+        // Check if a string looks like an instructor ID (UUID pattern)
+        const isInstructorId = (str) => {
+          return str && str.length > 30 && str.includes('-') && str.match(/[0-9a-f-]{30,}/);
+        };
+        
+        // Function to get a clean display name from email
+        const getDisplayNameFromEmail = (email) => {
+          // For new users (before profile edit), always show generic name
+          return "New User";
+        };
+        
+        // Function to check if username looks like random text (not a real username)
+        const isRandomText = (str) => {
+          // Check if string contains no vowels or looks like random characters
+          return str && str.length > 8 && !/[aeiou]/i.test(str) && str.length < 20;
+        };
+        
+        // Choose display name with better logic
+        let displayName;
+        if (userData.name && !isInstructorId(userData.name) && !isRandomText(userData.name)) {
+          displayName = userData.name;
+        } else if (userData.username && !isInstructorId(userData.username) && !isRandomText(userData.username)) {
+          displayName = userData.username;
+        } else {
+          // For new users or those with random usernames, show email-based name
+          displayName = getDisplayNameFromEmail(userData.email);
+        }
+        
+        setUserName(displayName);
         setUserEmail(userData.email || "");
         setInstructorId(userData.id || userData.instructor_id);
         setProfileImageUrl(userData.profile_image_url);
@@ -46,7 +76,35 @@ export const ProfileCard = () => {
           return;
         }
         
-        setUserName(payload.username || payload.name || "Instructor");
+        // Check if a string looks like an instructor ID (UUID pattern)
+        const isInstructorId = (str) => {
+          return str && str.length > 30 && str.includes('-') && str.match(/[0-9a-f-]{30,}/);
+        };
+        
+        // Function to get a clean display name from email
+        const getDisplayNameFromEmail = (email) => {
+          // For new users (before profile edit), always show generic name
+          return "New User";
+        };
+        
+        // Function to check if username looks like random text (not a real username)
+        const isRandomText = (str) => {
+          // Check if string contains no vowels or looks like random characters
+          return str && str.length > 8 && !/[aeiou]/i.test(str) && str.length < 20;
+        };
+        
+        // Choose display name with better logic
+        let displayName;
+        if (payload.name && !isInstructorId(payload.name) && !isRandomText(payload.name)) {
+          displayName = payload.name;
+        } else if (payload.username && !isInstructorId(payload.username) && !isRandomText(payload.username)) {
+          displayName = payload.username;
+        } else {
+          // For new users or those with random usernames, show email-based name
+          displayName = getDisplayNameFromEmail(payload.email);
+        }
+        
+        setUserName(displayName);
         setUserEmail(payload.email || "");
         setInstructorId(payload.id || payload.instructor_id);
         setProfileImageUrl(payload.profile_image_url);
@@ -89,8 +147,32 @@ export const ProfileCard = () => {
         if (data.instructor) {
           const instructor = data.instructor;
           
+          // Check if name looks like an instructor ID (UUID pattern)
+          const isInstructorId = (str) => {
+            return str && str.length > 30 && str.includes('-') && str.match(/[0-9a-f-]{30,}/);
+          };
+          
+          // Function to get a clean display name from email
+          const getDisplayNameFromEmail = (email) => {
+            // For new users (before profile edit), always show generic name
+            return "New User";
+          };
+          
+          // Function to check if name looks like random text
+          const isRandomText = (str) => {
+            return str && str.length > 8 && !/[aeiou]/i.test(str) && str.length < 20;
+          };
+          
+          // Choose display name with better logic
+          let displayName;
+          if (instructor.name && !isInstructorId(instructor.name) && !isRandomText(instructor.name)) {
+            displayName = instructor.name;
+          } else {
+            displayName = getDisplayNameFromEmail(instructor.email);
+          }
+          
           // Update all profile fields
-          setUserName(instructor.name || "Instructor");
+          setUserName(displayName);
           setUserEmail(instructor.email || "");
           setUserBio(instructor.bio || "");
           setSocialLinks(instructor.social_links || {});
@@ -149,7 +231,7 @@ export const ProfileCard = () => {
           {!isLoggedIn && <User className="h-8 w-8 text-blue-900" />}
           <h1 className="text-4xl font-extrabold text-blue-900">Hello, {userName}!</h1>
         </div>
-        {userEmail && (
+        {isLoggedIn && userEmail && userName !== "New User" && (
           <div className="flex items-center gap-3 text-blue-800 text-lg font-bold">
             <Mail className="h-6 w-6" />
             <span>{userEmail}</span>
