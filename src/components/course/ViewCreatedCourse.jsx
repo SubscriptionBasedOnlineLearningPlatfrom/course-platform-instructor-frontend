@@ -48,9 +48,45 @@ const ViewCreatedCourse = () => {
       course.course_description.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (courseId) => {
     if (!confirm("Delete this course? This cannot be undone.")) return;
-    setCourses((prev) => prev.filter((c) => c.id !== id));
+    console.log("Attempting to delete course:", courseId);
+    console.log("Delete URL:", `http://localhost:4000/instructor/courses/${courseId}`);
+    try {
+      // Make API call to delete course from database
+      const response = await axios.delete(
+        `http://localhost:4000/instructor/courses/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Remove course from local state only after successful deletion
+        setCourses((prev) => prev.filter((c) => c.course_id !== courseId));
+        toast.success("Course deleted successfully!");
+      }
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      
+      let errorMessage = "Failed to delete course";
+      try {
+        if (error.response?.data?.error) {
+          errorMessage += `: ${error.response.data.error}`;
+        } else if (error.message) {
+          errorMessage += `: ${error.message}`;
+        }
+      } catch (e) {
+        console.error("Error processing error message:", e);
+      }
+      
+      toast.error(errorMessage);
+    }
   };
 
   const startEdit = (course) => {
