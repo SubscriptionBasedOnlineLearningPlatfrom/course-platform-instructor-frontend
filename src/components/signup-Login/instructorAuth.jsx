@@ -88,7 +88,7 @@ export const InstructorAuth = () => {
 
     try {
       await axios.post(`${API_BASE}/auth/reset-password`, { email: email });
-      alert(`📩 Password reset link sent to ${email}!`);
+      alert(`📩 Password reset link sent to ${email}!\n\n⚠️ Please check:\n• Your inbox\n• Spam/Junk folder\n• Email may take a few minutes to arrive`);
       setShowResetForm(false);
     } catch (err) {
       alert(`❌ ${err?.response?.data?.error || err.message}`);
