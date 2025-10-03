@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useApi } from "../../contexts/APIContext";
 import { toast } from "react-toastify";
+import jsPDF from "jspdf";
 
 /**
  * QuizEditor
@@ -173,7 +174,7 @@ const QuizEditor = () => {
     // Optimistically update UI
     setQuestions((prev) => prev.filter((_, i) => i !== index));
     toast.success("Deleted the question successfully");
-    console.log(questionId)
+    console.log(questionId);
     try {
       if (questionId) {
         await axios.delete(
@@ -249,6 +250,41 @@ const QuizEditor = () => {
     }
   };
 
+  const downloadQuiz = (quizDataStr, filename = "quiz.pdf") => {
+    if (!quizDataStr) return;
+
+    const quizData =
+      typeof quizDataStr === "string" ? JSON.parse(quizDataStr) : quizDataStr;
+
+    const doc = new jsPDF();
+    let y = 10;
+
+    doc.setFontSize(16);
+    doc.text(quizData.quiz_title || "Quiz", 10, y);
+    y += 10;
+
+    quizData.questions.forEach((q, i) => {
+      doc.setFontSize(12);
+      doc.text(`${i + 1}. ${q.question_text}`, 10, y);
+      y += 8;
+
+      q.answers.forEach((a, ai) => {
+        const suffix = a.is_correct ? "- (correct) " : "";
+        doc.text(`${a.answer_text} ${suffix}`, 15, y);
+        y += 7;
+      });
+
+      y += 5;
+      if (y > 280) {
+        doc.addPage();
+        y = 10;
+      }
+    });
+
+    doc.save(filename);
+    toast.success("Downloaded successfully");
+  };
+
   useEffect(() => {
     console.log(questions);
   }, [questions]);
@@ -290,24 +326,7 @@ const QuizEditor = () => {
             <button
               onClick={() => {
                 // quick export JSON of current local edits
-                const dataStr = JSON.stringify(
-                  { quizId, quiz_title: quizTitle, questions },
-                  null,
-                  2
-                );
-                const uri =
-                  "data:application/json;charset=utf-8," +
-                  encodeURIComponent(dataStr);
-                const a = document.createElement("a");
-                a.href = uri;
-                a.download = `${(quizTitle || "quiz").replace(
-                  /\s+/g,
-                  "_"
-                )}_edit.json`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                toast.success("Exported current edits (JSON)");
+                downloadQuiz({ quiz_title: quizTitle, questions });
               }}
               className="inline-flex items-center gap-2 bg-white border px-4 py-2 rounded-lg shadow"
             >
