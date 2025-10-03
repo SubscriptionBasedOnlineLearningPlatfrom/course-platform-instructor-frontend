@@ -92,8 +92,8 @@ const Sidebar = () => {
 
           {/* Conditional Navigation based on login status */}
           {isLoggedIn ? (
-            <Link
-              to="/instructor-details"
+                        <Link
+              to="/profile"
               className="flex items-center gap-2 mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
             >
               <User className="h-4 w-4" />

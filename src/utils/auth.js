@@ -6,6 +6,7 @@ export const isAuthenticated = () => {
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  localStorage.removeItem('instructorProfileImages'); // Clear cached profile images
   window.location.href = '/';
 };
 
