@@ -14,7 +14,9 @@ import CreateCourse from "./pages/CreateCourse";
 import Signup_Login from "./pages/Signup_Login";
 import UpdatePassword from "./pages/UpdatePassword";
 import { ToastContainer } from "react-toastify";
-import InstructorDetails from "./components/instructor/InstructorDetails";
+import ViewCreatedCourses from "./components/course/ViewCreatedCourse";
+import InstructorDetails from './components/instructor/InstructorDetails';
+import Profile from "./pages/Profile";
 
 function App() {
   const [count, setCount] = useState(0);

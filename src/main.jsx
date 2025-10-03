@@ -6,6 +6,7 @@ import App from './App.jsx';
 import './index.css';
 import { PricingProvider } from "./contexts/PricingConetxt.jsx";
 import { ApiProvider } from './contexts/APIContext.jsx';
+import { Toaster } from 'react-hot-toast';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <PricingProvider>
       <ApiProvider>
         <App />
+        <Toaster position="top-right" />
       </ApiProvider>
     </PricingProvider>
   </BrowserRouter>
