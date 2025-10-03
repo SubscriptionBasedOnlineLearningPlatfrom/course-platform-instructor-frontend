@@ -17,6 +17,8 @@ import { ToastContainer } from "react-toastify";
 import ViewCreatedCourses from "./components/course/ViewCreatedCourse";
 import InstructorDetails from './components/instructor/InstructorDetails';
 import Profile from "./pages/Profile";
+import QuizViewer from "./components/quizes/ViewQuizes";
+import QuizEditor from "./components/quizes/QuizEditor";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -39,15 +41,17 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/instructor-details" element={<InstructorDetails />} />
-
+            <Route path='/profile' element={<Profile /> } />
             <Route
               path="/courses/:courseId/curriculum"
               element={<CurriculumPage />}
             />
-            <Route path="/ViewCreatedCourse" element={<ViewCreatedCourse />} />
+            <Route path="/ViewCreatedCourse" element={<ViewCreatedCourses />} />
             <Route path="/EnrollmentOverview" element={<EnrollmentOverview />} />
-            <Route path="/QuizCreation" element={<QuizCreation />} />
-            <Route path="/courses" element={<ViewCreatedCourse />} />
+            <Route path="/create-quiz/:lessonId" element={<QuizCreation />} />
+            <Route path="/edit-quiz/:lessonId/:quizId" element={<QuizEditor />} />
+            <Route path="/view-quizes/:lessonId" element={<QuizViewer />} />
+            <Route path="/courses" element={<ViewCreatedCourses />} />
             <Route path="/CommentsReplies" element={<CommentsReplies />} />
             <Route path="/create-course" element={<CreateCourse />} />
             <Route path="/view-courses" element={<ViewCreatedCourse />} />

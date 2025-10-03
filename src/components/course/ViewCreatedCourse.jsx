@@ -239,7 +239,7 @@ const ViewCreatedCourse = () => {
 
                       {/* VIEW */}
                       <button
-                        onClick={() => navigate("/courses/c1/curriculum")}
+                        onClick={() => navigate(`/courses/${course.course_id}/curriculum`)}
                         className="inline-flex items-center px-2 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-medium rounded-lg shadow-md hover:shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-red-500/30 transition-all duration-200"
                         title="View Course"
                       >

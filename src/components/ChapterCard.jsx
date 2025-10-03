@@ -150,7 +150,7 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
         </button>
 
         <button
-          onClick={() => navigate("/QuizCreation")}
+          onClick={() => navigate(`/create-quiz/${chapter.lesson_id}`)}
           className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
         >
           Add Quiz
