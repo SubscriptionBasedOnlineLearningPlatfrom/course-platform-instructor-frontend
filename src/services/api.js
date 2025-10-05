@@ -33,10 +33,25 @@ const handleResponse = async (response) => {
 export const courseAPI = {
   // Create a new course
   async createCourse(courseData) {
+    const token = localStorage.getItem('token');
+    
+    // If courseData is FormData (contains file), don't set Content-Type header
+    const headers = token ? { "Authorization": `Bearer ${token}` } : {};
+    
+    // If it's regular data, use JSON
+    const body = courseData instanceof FormData 
+      ? courseData 
+      : JSON.stringify(courseData);
+    
+    // Add Content-Type only for JSON data
+    if (!(courseData instanceof FormData)) {
+      headers["Content-Type"] = "application/json";
+    }
+
     const response = await fetch(`${API_BASE_URL}/instructor/courses`, {
       method: "POST",
-      headers: getAuthHeaders(),
-      body: JSON.stringify(courseData),
+      headers,
+      body,
     });
     
     return handleResponse(response);

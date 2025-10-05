@@ -219,8 +219,18 @@ const ViewCreatedCourse = () => {
                 >
                   <td className="py-5 px-6">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-[#0173d1] to-[#85c1f3] rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                        {course.course_title.charAt(0).toUpperCase()}
+                      <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden shadow-lg">
+                        {course.thumbnail_url ? (
+                          <img 
+                            src={course.thumbnail_url} 
+                            alt={course.course_title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-[#0173d1] to-[#85c1f3] flex items-center justify-center text-white font-bold text-lg">
+                            {course.course_title.charAt(0).toUpperCase()}
+                          </div>
+                        )}
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
