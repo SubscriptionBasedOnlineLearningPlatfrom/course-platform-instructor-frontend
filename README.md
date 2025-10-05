@@ -1,1 +1,0 @@
-# course-platform-instructor-frontend
