@@ -31,9 +31,9 @@ export const CourseOverview = () => {
       const transformedCourses = (result.data || []).map((course, index) => ({
         id: course.course_id,
         title: course.course_title,
-        students: Math.floor(Math.random() * 50) + 10, // Random for now, replace with real data
-        progress: Math.floor(Math.random() * 100), // Random for now, replace with real data  
-        rating: (4.5 + Math.random() * 0.5).toFixed(1), // Random 4.5-5.0 rating
+        // students: Math.floor(Math.random() * 50) + 10, // Random for now, replace with real data
+        // progress: Math.floor(Math.random() * 100), // Random for now, replace with real data  
+        // rating: (4.5 + Math.random() * 0.5).toFixed(1), // Random 4.5-5.0 rating
         description: course.course_description,
         category: course.category,
         level: course.level,
@@ -143,7 +143,7 @@ export const CourseOverview = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-5 text-sm text-muted-foreground">
+                {/* <div className="flex items-center gap-5 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1.5">
                     <Users className="h-4 w-4" />
                     {course.students} students
@@ -155,7 +155,7 @@ export const CourseOverview = () => {
                 </div>
 
                 {/* Progress */}
-                <div className="space-y-1">
+                {/* <div className="space-y-1">
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>Course Progress</span>
                     <span>{course.progress}%</span>
@@ -165,7 +165,7 @@ export const CourseOverview = () => {
                     className="h-2 bg-gray-200"
                     indicatorClassName="bg-gradient-to-r from-blue-500 to-purple-500"
                   />
-                </div>
+                </div> */} 
               </div>
 
               {/* View Button */}
