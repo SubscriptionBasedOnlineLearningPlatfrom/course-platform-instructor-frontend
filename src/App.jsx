@@ -18,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import InstructorDetails from './components/instructor/InstructorDetails';
 import Profile from "./pages/Profile";
 import { isAuthenticated } from "./utils/auth";
+import StudentSubmission from "./components/StudentSubmission";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -130,6 +131,7 @@ function App() {
             <Route path="/CommentsReplies" element={<CommentsReplies />} />
             <Route path="/create-course" element={<CreateCourse />} />
             <Route path="/view-courses" element={<ViewCreatedCourse />} />
+            <Route path="/courses/:courseId/submissions" element={<StudentSubmission />} />
             <Route path="/learner" element={<LearnerFeedbackCarousel />} />
             
             {/* Fallback route redirects to dashboard */}
