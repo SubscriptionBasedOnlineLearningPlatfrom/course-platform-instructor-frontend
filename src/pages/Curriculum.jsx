@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import ChapterCard from "../components/ChapterCard";
 import { useApi } from "../contexts/APIContext";
+import { useNavigate } from "react-router-dom";
 
 const CurriculumPage = () => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const {
     getAllModules,
     addModule: apiAddModule,
@@ -94,9 +96,17 @@ const CurriculumPage = () => {
 
   return (
     <div className="mt-10 p-4 sm:p-6 max-w-7xl mx-auto space-y-6 bg-blue-50 rounded-xl shadow-sm">
-      <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 text-center sm:text-left">
-        Course Curriculum
-      </h1>
+      <div className="flex flex-col sm:flex-row justify-between items-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 sm:mb-0">
+          Course Curriculum
+        </h1>
+        <button
+          onClick={() => navigate(`/courses/${courseId}/submissions`)}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm sm:text-base"
+        >
+          View Student Submissions
+        </button>
+      </div>
 
       {modules.length === 0 ? (
         <p className="text-gray-500 italic text-center sm:text-left">
