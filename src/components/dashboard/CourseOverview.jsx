@@ -187,3 +187,5 @@ export const CourseOverview = () => {
     </Card>
   );
 };
+
+export default CourseOverview;
