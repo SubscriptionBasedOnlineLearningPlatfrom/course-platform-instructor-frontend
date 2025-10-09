@@ -29,6 +29,10 @@ jest.mock('react-icons/fc', () => ({
   FcGoogle: () => <div data-testid="google-icon">Google</div>,
 }));
 
+// Mock window.location for navigation
+delete window.location;
+window.location = { href: '', reload: jest.fn() };
+
 // Mock UI components
 jest.mock('../../components/signup-Login2/ui/button.jsx', () => ({
   Button: ({ children, onClick, disabled, type, variant, className, ...props }) => (

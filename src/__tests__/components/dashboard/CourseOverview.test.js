@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { CourseOverview } from '../../../components/dashboard/CourseOverview';
 
@@ -76,7 +76,9 @@ describe('CourseOverview Component', () => {
   test('renders empty state when no courses', async () => {
     courseAPI.getInstructorCourses.mockResolvedValue({ data: [] });
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     await waitFor(() => {
       expect(screen.getByText('No courses yet')).toBeInTheDocument();
@@ -110,7 +112,9 @@ describe('CourseOverview Component', () => {
 
     courseAPI.getInstructorCourses.mockResolvedValue({ data: mockCourses });
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     await waitFor(() => {
       expect(screen.getByText('React Basics')).toBeInTheDocument();
@@ -123,7 +127,9 @@ describe('CourseOverview Component', () => {
   test('handles API error correctly', async () => {
     courseAPI.getInstructorCourses.mockRejectedValue(new Error('Network error'));
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Failed to load courses')).toBeInTheDocument();
@@ -137,7 +143,9 @@ describe('CourseOverview Component', () => {
     unauthorizedError.message = 'Unauthorized';
     courseAPI.getInstructorCourses.mockRejectedValue(unauthorizedError);
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Please login to view your courses')).toBeInTheDocument();
@@ -148,7 +156,9 @@ describe('CourseOverview Component', () => {
     // Test that retry button appears and can be clicked
     courseAPI.getInstructorCourses.mockRejectedValue(new Error('Network error'));
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     // Wait for error state to show
     await waitFor(() => {
@@ -167,7 +177,9 @@ describe('CourseOverview Component', () => {
   test('displays create course links', async () => {
     courseAPI.getInstructorCourses.mockResolvedValue({ data: [] });
     
-    renderCourseOverview();
+    await act(async () => {
+      renderCourseOverview();
+    });
     
     await waitFor(() => {
       const createLinks = screen.getAllByText(/Create/);
