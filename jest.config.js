@@ -28,10 +28,11 @@ export default {
     '\\.(gif|ttf|eot|svg|png|jpg|jpeg|webp|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js',
   },
   
-  // Test match patterns
+  // Test match patterns - exclude Selenium integration tests
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.(js|jsx)',
-    '<rootDir>/src/**/*.(test|spec).(js|jsx)'
+    '<rootDir>/src/**/*.(test|spec).(js|jsx)',
+    '!**/selenium/**'
   ],
   
   // Coverage configuration
