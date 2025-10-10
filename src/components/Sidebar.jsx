@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp, Menu, X, LogOut, User, LogIn } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Menu,
+  X,
+  LogOut,
+  User,
+  LogIn,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.jpeg";
 import { logout } from "../utils/auth.js";
@@ -39,88 +47,121 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="flex">
-      {/* Mobile Hamburger */}
-      <div className="md:hidden p-4 fixed top-0 left-0 z-50">
-        <button onClick={() => setSidebarOpen(true)} className="text-blue-900 focus:outline-none">
+    <>
+      {/* Hamburger button for small screens */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="text-blue-900 focus:outline-none"
+        >
           <Menu size={28} />
         </button>
       </div>
 
+      {/* Overlay for small screens */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-screen bg-blue-100 text-blue-900 flex flex-col shadow-lg z-50
+      <aside
+        className={`fixed top-0 left-0 h-screen w-72 bg-blue-100 text-blue-900 flex flex-col shadow-lg z-50
           transform transition-transform duration-300
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:w-64 w-72 rounded-r-lg`}
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:w-64 md:relative md:h-screen md:shadow-none rounded-r-lg overflow-y-auto`}
       >
         {/* Header */}
         <div className="flex items-center justify-start py-6 px-4 border-b border-blue-300">
-          <img src={logo} alt="ProLearnX Logo" className="w-12 h-12 rounded-full mr-3" />
-          <span className="text-xl font-bold" style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
+          <img
+            src={logo}
+            alt="ProLearnX Logo"
+            className="w-12 h-12 rounded-full mr-3"
+          />
+          <span
+            className="text-xl font-bold"
+            style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
+          >
             ProLearnX
           </span>
 
           {/* Close button for mobile */}
-          <button onClick={() => setSidebarOpen(false)} className="ml-auto md:hidden focus:outline-none">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="ml-auto md:hidden focus:outline-none"
+          >
             <X size={24} />
           </button>
         </div>
 
         {/* Menu */}
         <nav className="flex-1 px-4 py-6 overflow-y-auto">
-          {/* Dashboard */}
-          <Link to="/dashboard" className="block py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left">
+          <Link
+            to="/dashboard"
+            className="block py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
             Dashboard
           </Link>
 
-          {/* Conditional Navigation based on login status */}
-          {isLoggedIn ? (
-                        <Link
+          {isLoggedIn && (
+            <Link
               to="/profile"
               className="flex items-center gap-2 mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
             >
               <User className="h-4 w-4" />
               My Profile
             </Link>
-          ) : null}
+          )}
 
-          {/* Instructor-only features */}
-          {isLoggedIn ? (
-            <>
-              {/* Course Management */}
-              <div className="mt-4">
-                <div
-                  className="flex justify-between items-center py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
-                  onClick={() => setCourseOpen(!courseOpen)}
-                >
-                  <span>Course Management</span>
-                  {courseOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </div>
-                {courseOpen && (
-                  <div className="pl-6 mt-2 space-y-1 text-left">
-                    <Link to="/create-course" className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition">
-                      Add Course
-                    </Link>
-                    <Link to="/courses" className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition">
-                      Course List
-                    </Link>
-                  </div>
+          {isLoggedIn && (
+            <div className="mt-4">
+              <div
+                className="flex justify-between items-center py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                onClick={() => setCourseOpen(!courseOpen)}
+              >
+                <span>Course Management</span>
+                {courseOpen ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
                 )}
               </div>
-            </>
-          ) : null}
+              {courseOpen && (
+                <div className="pl-6 mt-2 space-y-1 text-left">
+                  <Link
+                    to="/create-course"
+                    className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                  >
+                    Add Course
+                  </Link>
+                  <Link
+                    to="/courses"
+                    className="block py-1 px-3 rounded hover:bg-blue-200 cursor-pointer transition"
+                  >
+                    Course List
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* Student Management */}
-          <Link to="/EnrollmentOverview" className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left">
+          <Link
+            to="/EnrollmentOverview"
+            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
             Show Enrolled Students
           </Link>
-          <Link to="/CommentsReplies" className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left">
+          <Link
+            to="/CommentsReplies"
+            className="block mt-4 py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
+          >
             Comments & Replies
           </Link>
         </nav>
 
-        {/* Authentication Button */}
+        {/* Authentication */}
         <div className="p-4 border-t border-blue-300">
           {isLoggedIn ? (
             <button
@@ -144,8 +185,8 @@ const Sidebar = () => {
             </Link>
           )}
         </div>
-      </div>
-    </div>
+      </aside>
+    </>
   );
 };
 

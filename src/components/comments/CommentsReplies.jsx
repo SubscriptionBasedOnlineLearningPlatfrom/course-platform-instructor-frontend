@@ -26,7 +26,6 @@ const CommentsReplies = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response);
         if (response.status === 200) {
           setComments(Object.values(response.data));
         }
@@ -71,7 +70,6 @@ const CommentsReplies = () => {
         }
       );
 
-      console.log(response);
 
       if (response.status === 200) {
         setReplies((prev) => ({
@@ -183,16 +181,18 @@ const CommentsReplies = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-3 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-3xl font-bold text-gray-800">Comments</h3>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+        <h3 className="text-2xl sm:text-3xl font-bold text-gray-800">
+          Comments
+        </h3>
         <input
           type="text"
           placeholder="Search comments..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+          className="border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
         />
       </div>
 
@@ -203,7 +203,7 @@ const CommentsReplies = () => {
             key={c.comment_id}
             className="bg-white/80 backdrop-blur-sm rounded-xl p-5 shadow-md border border-gray-100"
           >
-            <div className="flex items-start space-x-4">
+            <div className="flex flex-col sm:flex-row items-start sm:space-x-4 space-y-3 sm:space-y-0">
               <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-400 rounded-full flex items-center justify-center text-white font-bold">
                 {c.username.charAt(0).toUpperCase()}
               </div>
@@ -251,10 +251,7 @@ const CommentsReplies = () => {
                         Hide Replies
                       </>
                     ) : (
-                      <>
-                        
-                        Show Replies
-                      </>
+                      <>Show Replies</>
                     )}
                   </button>
 
@@ -263,7 +260,6 @@ const CommentsReplies = () => {
                     onClick={() => setActiveReply(c.comment_id)}
                     className="flex items-center gap-1 text-green-600 text-sm font-medium hover:underline"
                   >
-                    
                     Reply
                   </button>
                 </div>
@@ -282,7 +278,7 @@ const CommentsReplies = () => {
                         })
                       }
                     />
-                    <div className="mt-2 flex gap-2">
+                    <div className="mt-2 flex flex-col sm:flex-row gap-2">
                       <button
                         onClick={() => handleReplySubmit(c.comment_id)}
                         className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600"
@@ -319,7 +315,7 @@ const CommentsReplies = () => {
                               value={editDraft}
                               onChange={(e) => setEditDraft(e.target.value)}
                             />
-                            <div className="mt-2 flex gap-2">
+                            <div className="mt-2 flex flex-col sm:flex-row gap-2">
                               <button
                                 onClick={handleSaveEdit}
                                 className="px-3 py-1 bg-green-500 text-white rounded-md text-sm hover:bg-green-600"
@@ -339,7 +335,7 @@ const CommentsReplies = () => {
                           </div>
                         ) : (
                           <>
-                            <div className="ml-4 mt-2 p-3 rounded-2xl bg-gray-50 shadow-sm border border-gray-200">
+                            <div className="ml-0 sm:ml-4 mt-2 p-3 rounded-2xl bg-gray-50 shadow-sm border border-gray-200 overflow-x-auto">
                               <p className="text-gray-800 text-sm leading-relaxed">
                                 {reply.reply_text}
                               </p>

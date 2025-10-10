@@ -14,15 +14,19 @@ import CreateCourse from "./pages/CreateCourse";
 import Signup_Login from "./pages/Signup_Login";
 import UpdatePassword from "./pages/UpdatePassword";
 import { ToastContainer } from "react-toastify";
-// import ViewCreatedCourses from "./components/course/ViewCreatedCourse";
-import InstructorDetails from './components/instructor/InstructorDetails';
+import ViewCreatedCourses from "./components/course/ViewCreatedCourse";
+import InstructorDetails from "./components/instructor/InstructorDetails";
 import Profile from "./pages/Profile";
+import QuizViewer from "./components/quizes/ViewQuizes";
+import QuizEditor from "./components/quizes/QuizEditor";
 import { isAuthenticated } from "./utils/auth";
 import StudentSubmission from "./components/StudentSubmission";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
 
   useEffect(() => {
     // Check authentication status on app load
@@ -100,12 +104,7 @@ function App() {
   return (
     <>
       <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className="w-64 flex-none border-r overflow-y-auto">
-          <div className="w-full h-full">
-            <Sidebar />
-          </div>
-        </aside>
+        <Sidebar />
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
@@ -118,16 +117,22 @@ function App() {
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/instructor-details" element={<InstructorDetails />} />
             <Route path="/profile" element={<Profile />} />
-
             <Route
               path="/courses/:courseId/curriculum"
               element={<CurriculumPage />}
             />
-            
-            {/* <Route path="/ViewCreatedCourse" element={<ViewCreatedCourse />} /> */}
-            <Route path="/EnrollmentOverview" element={<EnrollmentOverview />} />
-            <Route path="/QuizCreation" element={<QuizCreation />} />
-            <Route path="/courses" element={<ViewCreatedCourse />} />
+            <Route path="/ViewCreatedCourse" element={<ViewCreatedCourses />} />
+            <Route
+              path="/EnrollmentOverview"
+              element={<EnrollmentOverview />}
+            />
+            <Route path="/create-quiz/:lessonId" element={<QuizCreation />} />
+            <Route
+              path="/edit-quiz/:lessonId/:quizId"
+              element={<QuizEditor />}
+            />
+            <Route path="/view-quizes/:lessonId" element={<QuizViewer />} />
+            <Route path="/courses" element={<ViewCreatedCourses />} />
             <Route path="/CommentsReplies" element={<CommentsReplies />} />
             <Route path="/create-course" element={<CreateCourse />} />
             <Route path="/view-courses" element={<ViewCreatedCourse />} />
