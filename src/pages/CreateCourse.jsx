@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/createCourse/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/createCourse/ui/card";
@@ -6,7 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "../components/createCourse/ui/input";
 import { Textarea } from "../components/createCourse/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/createCourse/ui/select";
-import { ArrowLeft, Plus, BookOpen, Trophy, Clock, DollarSign } from "lucide-react";
+import { ArrowLeft, Plus, BookOpen, Trophy, Clock, DollarSign, Upload, X, Image } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -29,6 +29,9 @@ const courseSchema = z.object({
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   const form = useForm({
     resolver: zodResolver(courseSchema),
@@ -42,6 +45,42 @@ const CreateCourse = () => {
     },
   });
 
+  // Handle thumbnail file selection
+  const handleThumbnailChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please select an image file");
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+
+      setThumbnailFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Remove thumbnail
+  const removeThumbnail = () => {
+    setThumbnailFile(null);
+    setThumbnailPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
@@ -54,8 +93,36 @@ const CreateCourse = () => {
         return;
       }
 
-      // Send data to backend using API service
-      const result = await courseAPI.createCourse(data);
+      // Create FormData for file upload
+      const formData = new FormData();
+      
+      // Add all form fields
+      Object.keys(data).forEach(key => {
+        if (data[key] !== undefined && data[key] !== '') {
+          formData.append(key, data[key]);
+        }
+      });
+
+      // Add thumbnail if selected
+      if (thumbnailFile) {
+        formData.append('thumbnail', thumbnailFile);
+      }
+
+      // Send data to backend using fetch (axios doesn't handle FormData well with files)
+      const response = await fetch('http://localhost:4000/instructor/courses', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create course');
+      }
+
+      const result = await response.json();
 
       toast.success("Course created successfully!");
       console.log("Created course:", result.data);
@@ -182,6 +249,56 @@ const CreateCourse = () => {
                     </FormItem>
                   )}
                 />
+
+                {/* Course Thumbnail */}
+                <div className="space-y-4">
+                  <FormLabel className="text-sky-700 font-semibold">Course Thumbnail</FormLabel>
+                  <FormDescription className="text-sky-600">
+                    Upload an attractive thumbnail image for your course (Max: 5MB, JPG/PNG)
+                  </FormDescription>
+                  
+                  {!thumbnailPreview ? (
+                    <div 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-sky-300 rounded-xl p-8 text-center bg-white/60 hover:bg-white/80 cursor-pointer transition-all duration-300 hover:border-sky-400"
+                    >
+                      <Upload className="h-12 w-12 text-sky-400 mx-auto mb-4" />
+                      <p className="text-sky-700 font-medium text-lg mb-2">
+                        Click to upload course thumbnail
+                      </p>
+                      <p className="text-sky-500 text-sm">
+                        JPG, PNG up to 5MB
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <div className="border-2 border-sky-300 rounded-xl p-4 bg-white/60">
+                        <img 
+                          src={thumbnailPreview} 
+                          alt="Course thumbnail preview" 
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={removeThumbnail}
+                        className="absolute top-2 right-2 h-8 w-8 p-0 rounded-full"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleThumbnailChange}
+                    className="hidden"
+                  />
+                </div>
 
                 {/* Level / Duration */}
                 <div className="grid md:grid-cols-2 gap-6">

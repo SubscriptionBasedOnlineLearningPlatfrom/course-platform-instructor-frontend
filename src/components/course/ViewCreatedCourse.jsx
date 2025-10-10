@@ -1,6 +1,6 @@
 import React, { use, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaGraduationCap, FaBook, FaCode, FaPalette, FaBriefcase, FaGlobe } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import { MdDoubleArrow } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,17 @@ const ViewCreatedCourse = () => {
     category: "",
   });
 
+  // Get category icon and color
+  const getCategoryDisplay = (category) => {
+    const categoryMap = {
+      programming: { icon: FaCode, color: "from-purple-500 to-indigo-600", name: "Programming" },
+      design: { icon: FaPalette, color: "from-pink-500 to-rose-600", name: "Design" },
+      business: { icon: FaBriefcase, color: "from-green-500 to-emerald-600", name: "Business" },
+      language: { icon: FaGlobe, color: "from-blue-500 to-cyan-600", name: "Language" },
+    };
+    return categoryMap[category] || { icon: FaBook, color: "from-gray-500 to-slate-600", name: category };
+  };
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -32,7 +43,13 @@ const ViewCreatedCourse = () => {
         );
 
         if (response.status === 200) {
-          setCourses(Object.values(response.data));
+          console.log("📊 Fetched courses data:", response.data);
+          const coursesArray = Object.values(response.data);
+          console.log("🖼️ Courses with thumbnails:", coursesArray.map(course => ({
+            title: course.course_title,
+            thumbnail: course.thumbnail_url || 'No thumbnail'
+          })));
+          setCourses(coursesArray);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -48,9 +65,45 @@ const ViewCreatedCourse = () => {
       course.course_description.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = (id) => {
+  const handleDelete = async (courseId) => {
     if (!confirm("Delete this course? This cannot be undone.")) return;
-    setCourses((prev) => prev.filter((c) => c.id !== id));
+    console.log("Attempting to delete course:", courseId);
+    console.log("Delete URL:", `http://localhost:4000/instructor/courses/${courseId}`);
+    try {
+      // Make API call to delete course from database
+      const response = await axios.delete(
+        `http://localhost:4000/instructor/courses/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Remove course from local state only after successful deletion
+        setCourses((prev) => prev.filter((c) => c.course_id !== courseId));
+        toast.success("Course deleted successfully!");
+      }
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      
+      let errorMessage = "Failed to delete course";
+      try {
+        if (error.response?.data?.error) {
+          errorMessage += `: ${error.response.data.error}`;
+        } else if (error.message) {
+          errorMessage += `: ${error.message}`;
+        }
+      } catch (e) {
+        console.error("Error processing error message:", e);
+      }
+      
+      toast.error(errorMessage);
+    }
   };
 
   const startEdit = (course) => {
@@ -184,12 +237,51 @@ const ViewCreatedCourse = () => {
                 >
                   <td className="py-5 px-6">
                     <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gradient-to-r from-[#0173d1] to-[#85c1f3] rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                        {course.course_title.charAt(0).toUpperCase()}
+                      <div className="flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden shadow-lg ring-2 ring-white hover:ring-blue-300 transition-all duration-300 group-hover:scale-105">
+                        {course.thumbnail_url ? (
+                          <img 
+                            src={course.thumbnail_url} 
+                            alt={course.course_title}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                            onError={(e) => {
+                              // Fallback if image fails to load
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className={`w-full h-full bg-gradient-to-br ${getCategoryDisplay(course.category).color} flex flex-col items-center justify-center text-white shadow-inner ${course.thumbnail_url ? 'hidden' : 'flex'}`}
+                          style={{ display: course.thumbnail_url ? 'none' : 'flex' }}
+                        >
+                          <div className="text-2xl mb-1">
+                            {React.createElement(getCategoryDisplay(course.category).icon)}
+                          </div>
+                          <div className="text-xs font-bold text-center opacity-90">
+                            {course.course_title.charAt(0).toUpperCase()}
+                          </div>
+                        </div>
+
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <div className="ml-6">
+                        <div className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 mb-1">
                           {course.course_title}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getCategoryDisplay(course.category).color} text-white shadow-sm`}>
+                            {React.createElement(getCategoryDisplay(course.category).icon, { className: "w-3 h-3" })}
+                            {getCategoryDisplay(course.category).name}
+                          </span>
+                          {course.level && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              {course.level}
+                            </span>
+                          )}
+                          {/* {course.thumbnail_url && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-sm">
+                              🖼️ Thumbnail
+                            </span>
+                          )} */}
                         </div>
                       </div>
                     </div>
@@ -230,10 +322,8 @@ const ViewCreatedCourse = () => {
                       </button>
 
                       <button
-                        onClick={() =>
-                          navigate(`/courses/${course.course_id}/curriculum`)
-                        }
-                        className="p-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 focus:ring-4 focus:ring-green-500/30 transition-all"
+                        onClick={() => navigate(`/courses/${course.course_id}/curriculum`)}
+                        className="inline-flex items-center px-2 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-medium rounded-lg shadow-md hover:shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-red-500/30 transition-all duration-200"
                         title="View Course"
                       >
                         <MdDoubleArrow />

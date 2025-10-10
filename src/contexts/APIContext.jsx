@@ -101,6 +101,17 @@ const deleteFile = async (lessonId, type) => {
   return response.data;
 };
 
+//handle submissions
+const getAllSubmissions = async (courseId) => {
+  const response = await api.get(`/instructor/submissions/${courseId}`);
+  return response.data;
+};
+
+const updateGrade = async (submissionId, grade) => {
+  const response = await api.patch(`/instructor/submissions/${submissionId}/grade`, {grade});
+  return response.data;
+};
+
 
 
 // =======================
@@ -125,6 +136,8 @@ export const ApiProvider = ({ children }) => {
         addNote,
         addAssignment,
         deleteFile,
+        getAllSubmissions,
+        updateGrade,
 
       }}
     >

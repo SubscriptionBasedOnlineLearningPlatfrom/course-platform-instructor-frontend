@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import ChapterCard from "../components/ChapterCard";
 import { useApi } from "../contexts/APIContext";
+import { useNavigate } from "react-router-dom";
 
 const CurriculumPage = () => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const {
     getAllModules,
     addModule: apiAddModule,
@@ -23,7 +25,7 @@ const CurriculumPage = () => {
     const fetchModules = async () => {
       try {
         const data = await getAllModules(courseId);
-        setModules(data.modules); // backend returns { modules: [...] }
+        setModules(data.modules); 
       } catch (err) {
         console.error(err);
       }
@@ -37,7 +39,7 @@ const CurriculumPage = () => {
 
     try {
       const data = await apiAddModule(courseId, newModuleTitle);
-      setModules([...modules, data.module]); // backend should return { module: {...} }
+      setModules([...modules, data.module]); 
       setNewModuleTitle("");
     } catch (err) {
       console.error(err);
@@ -61,7 +63,6 @@ const CurriculumPage = () => {
 
     try {
       const data = await apiAddChapter(moduleId, title);
-      // backend should return { chapter: { lesson_id, lesson_title, ... } }
       setModules((prev) =>
         prev.map((mod) =>
           mod.module_id === moduleId
@@ -94,9 +95,17 @@ const CurriculumPage = () => {
 
   return (
     <div className="mt-10 p-4 sm:p-6 max-w-7xl mx-auto space-y-6 bg-blue-50 rounded-xl shadow-sm">
-      <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 text-center sm:text-left">
-        Course Curriculum
-      </h1>
+      <div className="flex flex-col sm:flex-row justify-between items-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 sm:mb-0">
+          Course Curriculum
+        </h1>
+        <button
+          onClick={() => navigate(`/courses/${courseId}/submissions`)}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm sm:text-base"
+        >
+          View Student Submissions
+        </button>
+      </div>
 
       {modules.length === 0 ? (
         <p className="text-gray-500 italic text-center sm:text-left">
@@ -203,69 +212,3 @@ const CurriculumPage = () => {
 };
 
 export default CurriculumPage;
-
-
-/* rsponse module from back =
-
-{
-    "modules": [
-        {
-            "module_id": "46ed31a3-e226-4bf8-b9c0-23d206de0426",
-            "module_title": "Introduction to React",
-            "module_order": 1,
-            "chapters": [
-                {
-                    "note_url": "https://onlinelearningplatform.sgp1.digitaloceanspaces.com/notes/1758536953999-React_Lesson.pdf",
-                    "lesson_id": "565a5fcb-4628-4b39-b207-e15b241ddb29",
-                    "video_url": "https://onlinelearningplatform.sgp1.digitaloceanspaces.com/videos/1758536649613-React_Lesson.mp4",
-                    "lesson_title": "What is React?",
-                    "assignment_url": "https://onlinelearningplatform.sgp1.digitaloceanspaces.com/assignments/1758537097026-AssignmentReactJS.pdf"
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "4b697cba-a3df-4249-ac94-a55a6aa36870",
-                    "video_url": null,
-                    "lesson_title": "Introduction to JavaScript",
-                    "assignment_url": null
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "c13a90b2-0cfc-489a-8abe-de87fbb6a94e",
-                    "video_url": null,
-                    "lesson_title": "Getting Started with React",
-                    "assignment_url": null
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "950c15e3-5679-4b2d-b40a-b8d3d6eea77f",
-                    "video_url": null,
-                    "lesson_title": "React Components",
-                    "assignment_url": null
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "d150ecba-f947-4e3b-a57c-c763aa47c77b",
-                    "video_url": null,
-                    "lesson_title": "JSX Syntax",
-                    "assignment_url": null
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "d493f590-6258-4959-9d2f-21f512957164",
-                    "video_url": null,
-                    "lesson_title": "Props in React",
-                    "assignment_url": null
-                },
-                {
-                    "note_url": null,
-                    "lesson_id": "172e25e9-71bb-4e3f-b2c7-355cb4881b12",
-                    "video_url": null,
-                    "lesson_title": "React State",
-                    "assignment_url": null
-                }
-            ]
-        }
-    ]
-}
-    
-*/

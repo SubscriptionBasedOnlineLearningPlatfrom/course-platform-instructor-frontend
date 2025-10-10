@@ -203,7 +203,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 relative particles">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+      <div className="relative z-10 p-6 max-w-4xl mx-auto">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold flex items-center justify-between">
@@ -492,6 +495,7 @@ const Profile = () => {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };

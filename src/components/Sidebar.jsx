@@ -177,7 +177,7 @@ const Sidebar = () => {
             </button>
           ) : (
             <Link
-              to="/"
+              to="/login"
               className="w-full py-2 px-3 rounded bg-green-600 hover:bg-green-700 text-white cursor-pointer transition text-center font-medium flex items-center justify-center gap-2"
             >
               <LogIn className="h-4 w-4" />

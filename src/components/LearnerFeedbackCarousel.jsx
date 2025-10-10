@@ -1,11 +1,10 @@
-// insert component to the correct position of the page
 import React, { useRef } from "react";
-import g1 from "../assets/g1.jpg";
-import g2 from "../assets/g2.jpg";
-import g3 from "../assets/g3.jpg";
-import b1 from "../assets/b1.jpg";
-import b2 from "../assets/b2.jpg";
-import b3 from "../assets/b3.jpg";
+import g1 from "../assets/student_g1.jpg";
+import g2 from "../assets/student_g2.jpg";
+import g3 from "../assets/student_g3.jpg";
+import b1 from "../assets/student_b1.jpg";
+import b2 from "../assets/student_b2.jpg";
+import b3 from "../assets/student_b3.jpg";
 
 const feedbacks = [
   {
