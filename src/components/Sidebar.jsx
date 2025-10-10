@@ -71,7 +71,7 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 h-screen w-72 bg-blue-100 text-blue-900 flex flex-col shadow-lg z-50
           transform transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:w-64 md:relative md:h-full md:shadow-none rounded-r-lg overflow-y-auto`}
+          md:translate-x-0 md:w-64 md:relative md:h-screen md:shadow-none rounded-r-lg overflow-y-auto`}
       >
         {/* Header */}
         <div className="flex items-center justify-start py-6 px-4 border-b border-blue-300">
