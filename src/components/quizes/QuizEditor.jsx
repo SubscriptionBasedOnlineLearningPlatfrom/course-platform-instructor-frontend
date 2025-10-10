@@ -7,23 +7,6 @@ import { useApi } from "../../contexts/APIContext";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 
-/**
- * QuizEditor
- * - Expects BackendAPI in context
- * - Loads quiz from `${BackendAPI}/quizzes/:quizId` (adjust if your route differs)
- * - Edits in local state and posts to `${BackendAPI}/quiz/edit`
- *
- * Backend expected payload:
- * {
- *   quizId: "...",
- *   quiz_title: "...",
- *   questions: [
- *     { question_id?: "...", question_text: "...",
- *       answers: [{ answer_id?: "...", answer_text: "...", is_correct: true|false }, ...]
- *     }, ...
- *   ]
- * }
- */
 
 const QuizEditor = () => {
   const { BackendAPI } = useApi();

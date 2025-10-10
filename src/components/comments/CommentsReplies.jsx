@@ -26,7 +26,6 @@ const CommentsReplies = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response);
         if (response.status === 200) {
           setComments(Object.values(response.data));
         }
@@ -71,7 +70,6 @@ const CommentsReplies = () => {
         }
       );
 
-      console.log(response);
 
       if (response.status === 200) {
         setReplies((prev) => ({

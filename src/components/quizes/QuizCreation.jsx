@@ -24,7 +24,6 @@ const QuizCreation = () => {
     const fetchQuizzes = async () => {
       try {
         const response = await axios.get(`${BackendAPI}/quizzes/${lessonId}`);
-        console.log(response);
         if (response.status === 200) {
           setQuizId(response.data.quiz[0].quiz_id);
           setQuiz(
@@ -48,7 +47,6 @@ const QuizCreation = () => {
 
   // Save quiz data to localStorage whenever quiz changes
   useEffect(() => {
-    console.log(quiz);
     if (quiz.length > 0) {
       localStorage.setItem("quizCreatorData", JSON.stringify(quiz));
     } else {
