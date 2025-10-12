@@ -5,7 +5,7 @@ import axios from "axios";
 // PRIVATE API (with token)
 // =======================
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
 });
 
 api.interceptors.request.use(
@@ -120,7 +120,7 @@ const updateGrade = async (submissionId, grade) => {
 const ApiContext = createContext({});
 
 export const ApiProvider = ({ children }) => {
-  const BackendAPI = "http://localhost:4000/instructor";
+  const BackendAPI = `${import.meta.env.VITE_API_URL || "http://localhost:4000"}/instructor`;
 
   return (
     <ApiContext.Provider
