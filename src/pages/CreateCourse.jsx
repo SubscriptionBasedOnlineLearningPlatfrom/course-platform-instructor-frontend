@@ -109,7 +109,7 @@ const CreateCourse = () => {
       }
 
       // Send data to backend using fetch (axios doesn't handle FormData well with files)
-      const response = await fetch('http://localhost:4000/instructor/courses', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/instructor/courses`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
