@@ -133,7 +133,7 @@ export const ProfileCard = () => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/instructor/profile/`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/profile/`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

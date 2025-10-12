@@ -76,7 +76,7 @@ export default function UpdatePassword() {
     e.preventDefault()
     if (!token) return alert("Missing reset token.")
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/auth/update-password`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/auth/update-password`, {
         token, newPassword
       })
       

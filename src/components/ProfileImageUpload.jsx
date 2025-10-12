@@ -61,7 +61,7 @@ const ProfileImageUpload = ({
       formData.append('instructorId', instructorId);
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/instructor/profile/upload-image`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/profile/upload-image`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -105,7 +105,7 @@ const ProfileImageUpload = ({
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:4000"}/instructor/profile/delete-image`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/profile/delete-image`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
