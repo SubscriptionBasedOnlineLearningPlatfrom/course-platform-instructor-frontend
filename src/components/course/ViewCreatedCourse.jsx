@@ -68,11 +68,11 @@ const ViewCreatedCourse = () => {
   const handleDelete = async (courseId) => {
     if (!confirm("Delete this course? This cannot be undone.")) return;
     console.log("Attempting to delete course:", courseId);
-    console.log("Delete URL:", `http://localhost:4000/instructor/courses/${courseId}`);
+    console.log("Delete URL:", `${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/courses/${courseId}`);
     try {
       // Make API call to delete course from database
       const response = await axios.delete(
-        `http://localhost:4000/instructor/courses/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/courses/${courseId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

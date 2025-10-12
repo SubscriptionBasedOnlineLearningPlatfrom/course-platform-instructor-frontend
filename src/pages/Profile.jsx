@@ -59,7 +59,7 @@ const Profile = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:4000/instructor/profile/', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/profile/`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -130,7 +130,7 @@ const Profile = () => {
       if (profileData.portfolio) socialLinks.portfolio = profileData.portfolio;
       if (profileData.instagram) socialLinks.instagram = profileData.instagram;
 
-      const response = await fetch('http://localhost:4000/instructor/profile/', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/instructor/profile/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
