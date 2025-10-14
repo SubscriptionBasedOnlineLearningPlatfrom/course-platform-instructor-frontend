@@ -12,7 +12,7 @@ const StudentSubmission = () => {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const data = await getAllSubmissions(courseId); 
+        const data = await getAllSubmissions(courseId);
         setSubmissions(data);
       } catch (err) {
         console.error("Failed to fetch submissions:", err.message);
@@ -21,13 +21,11 @@ const StudentSubmission = () => {
     fetchSubmissions();
   }, [courseId, getAllSubmissions]);
 
-
   const handleGradeChange = (id, value) => {
     setSubmissions((prev) =>
       prev.map((s) => (s.id === id ? { ...s, grade: value } : s))
     );
   };
-
 
   const handleSaveGrade = async (id) => {
     const submission = submissions.find((s) => s.id === id);
@@ -75,9 +73,14 @@ const StudentSubmission = () => {
                   {s.studentName}
                 </td>
                 <td className="p-4">
-                  <span className="text-blue-600 underline cursor-pointer text-base sm:text-lg">
-                    {s.fileName}
-                  </span>
+                  <a
+                    href={s.file_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline cursor-pointer text-base sm:text-lg"
+                  >
+                    {s.fileName || "View File"}
+                  </a>
                 </td>
                 <td className="p-4">
                   <input
