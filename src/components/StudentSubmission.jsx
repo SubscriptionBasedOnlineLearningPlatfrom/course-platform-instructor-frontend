@@ -75,14 +75,9 @@ const StudentSubmission = () => {
                   {s.studentName}
                 </td>
                 <td className="p-4">
-                  <a
-                    href={s.fileName}         
-                    target="_blank"           
-                    rel="noopener noreferrer" 
-                    className="text-blue-600 underline cursor-pointer text-base sm:text-lg"
-                  >
-                    {s.fileName || "View File"}
-                  </a>
+                  <span className="text-blue-600 underline cursor-pointer text-base sm:text-lg">
+                    {s.fileName}
+                  </span>
                 </td>
                 <td className="p-4">
                   <input
