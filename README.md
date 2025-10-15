@@ -4,6 +4,8 @@ A modern, feature-rich React application for course instructors to create, manag
 
 ## 🌟 Features
 
+> 📘 Looking for a step-by-step walkthrough? Read the full [Instructor Guide](./INSTRUCTOR_GUIDE.md).
+
 ### 📚 Course Management
 - **Create Courses**: Full course creation with thumbnail upload, category selection, and detailed descriptions
 - **Course Dashboard**: View all created courses with beautiful visual cards and category-based color schemes
