@@ -60,16 +60,19 @@ function App() {
   if (!isLoggedIn) {
     return (
       <>
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-gray-50">
           {/* Sidebar for guests (limited functionality) */}
-          <aside className="w-64 flex-none border-r overflow-y-auto">
-            <div className="w-full h-full">
-              <Sidebar />
-            </div>
-          </aside>
+          <div className="hidden md:block md:w-64 flex-shrink-0">
+            <Sidebar />
+          </div>
+
+          {/* Mobile Sidebar (overlay) */}
+          <div className="md:hidden">
+            <Sidebar />
+          </div>
 
           {/* Main Content for guests */}
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto w-full md:w-auto">
             <ToastContainer />
             <Routes>
               {/* Default route shows dashboard for guests */}
@@ -103,11 +106,19 @@ function App() {
   // If logged in, show the full dashboard with sidebar and protected routes
   return (
     <>
-      <div className="flex min-h-screen">
-        <Sidebar />
+      <div className="flex min-h-screen bg-gray-50">
+        {/* Sidebar */}
+        <div className="hidden md:block md:w-64 flex-shrink-0">
+          <Sidebar />
+        </div>
+
+        {/* Mobile Sidebar (overlay) */}
+        <div className="md:hidden">
+          <Sidebar />
+        </div>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto w-full md:w-auto">
           <ToastContainer />
           <Routes>
             {/* Default route redirects to dashboard when logged in */}

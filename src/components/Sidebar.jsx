@@ -68,13 +68,14 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen w-72 bg-blue-100 text-blue-900 flex flex-col shadow-lg z-50
+        className={`fixed top-0 left-0 h-full w-72 bg-blue-100 text-blue-900 flex flex-col shadow-lg z-50
           transform transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:w-64 md:relative md:h-screen md:shadow-none rounded-r-lg overflow-y-auto`}
+          md:translate-x-0 md:w-64 md:sticky md:top-0 md:h-screen overflow-y-auto`}
+
       >
         {/* Header */}
-        <div className="flex items-center justify-start py-6 px-4 border-b border-blue-300">
+        <div className="flex items-center justify-start py-4 px-4 border-b border-blue-300 bg-blue-100">
           <img
             src={logo}
             alt="ProLearnX Logo"
@@ -97,7 +98,7 @@ const Sidebar = () => {
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 px-4 py-6 overflow-y-auto">
+        <nav className="flex-1 px-4 py-4 overflow-y-auto">
           <Link
             to="/dashboard"
             className="block py-2 px-3 rounded hover:bg-blue-200 cursor-pointer transition text-left"
@@ -162,7 +163,7 @@ const Sidebar = () => {
         </nav>
 
         {/* Authentication */}
-        <div className="p-4 border-t border-blue-300">
+        <div className="p-4 mt-auto border-t border-blue-300 bg-blue-100">
           {isLoggedIn ? (
             <button
               onClick={() => {
