@@ -219,10 +219,21 @@ const CreateCourse = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="programming">💻 Programming & Dev</SelectItem>
-                            <SelectItem value="design">🎨 Design</SelectItem>
-                            <SelectItem value="business">💼 Business</SelectItem>
-                            <SelectItem value="language">🌍 Language</SelectItem>
+                            <SelectItem value="programming">💻 Programming & Development</SelectItem>
+                            <SelectItem value="design">🎨 Design & Creative Arts</SelectItem>
+                            <SelectItem value="business">💼 Business & Entrepreneurship</SelectItem>
+                            <SelectItem value="language">🌍 Language Learning</SelectItem>
+                            <SelectItem value="marketing">📢 Marketing & Sales</SelectItem>
+                            <SelectItem value="data-science">📊 Data Science & Analytics</SelectItem>
+                            <SelectItem value="personal-development">🌟 Personal Development</SelectItem>
+                            <SelectItem value="finance">💰 Finance & Accounting</SelectItem>
+                            <SelectItem value="health-fitness">💪 Health & Fitness</SelectItem>
+                            <SelectItem value="music">🎵 Music & Audio</SelectItem>
+                            <SelectItem value="photography">📸 Photography & Video</SelectItem>
+                            <SelectItem value="teaching">👨‍🏫 Teaching & Academics</SelectItem>
+                            <SelectItem value="lifestyle">🏡 Lifestyle & Hobbies</SelectItem>
+                            <SelectItem value="technology">🔧 IT & Software</SelectItem>
+                            <SelectItem value="science">🔬 Science & Engineering</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage className="text-red-500" />
