@@ -93,6 +93,18 @@ const CurriculumPage = () => {
     }
   };
 
+  const handleUpdateChapter = (updatedChapter) => {
+    setModules((prevModules) =>
+      prevModules.map((mod) => ({
+        ...mod,
+        chapters: mod.chapters?.map((ch) =>
+          ch.lesson_id === updatedChapter.lesson_id ? updatedChapter : ch
+        ),
+      }))
+    );
+  };
+
+
   return (
     <div className="mt-10 p-4 sm:p-6 max-w-7xl mx-auto space-y-6 bg-blue-50 rounded-xl shadow-sm">
       <div className="flex flex-col sm:flex-row justify-between items-center">
@@ -153,7 +165,7 @@ const CurriculumPage = () => {
                     key={ch.lesson_id}
                     className="flex items-center gap-2 border border-blue-100 rounded-lg p-2 bg-gray-50"
                   >
-                    <ChapterCard chapter={ch}/>
+                    <ChapterCard chapter={ch} onUpdateChapter={handleUpdateChapter} />
                     <button
                       onClick={() => handleDeleteChapter(mod.module_id, ch.lesson_id)}
                       className="p-2 text-red-500 hover:text-red-700 cursor-pointer"
