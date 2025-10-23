@@ -115,13 +115,14 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
 
     try {
       await deleteFile(chapter.lesson_id, res.type);
+      if (onUpdateChapter) onUpdateChapter(updatedChapter);
+      setResources(prev => prev.filter(r => r.id !== res.id));
     } catch (err) {
       alert("Failed to delete file: " + err.message);
-      setResources((prev) => [...prev, res]);
       return;
     }
 
-    if (onUpdateChapter) onUpdateChapter(updatedChapter);
+    setLoadingType(null);
   };
 
   return (
