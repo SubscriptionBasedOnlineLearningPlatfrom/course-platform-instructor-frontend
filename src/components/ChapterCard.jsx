@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../contexts/APIContext";
 
@@ -36,6 +36,21 @@ export default function ChapterCard({ chapter, onUpdateChapter }) {
         : null,
     ].filter(Boolean)
   );
+
+  //sync with parent updates when accordion re-opens
+  useEffect(() => {
+    setResources([
+      chapter.video_url
+        ? { id: "video", type: "Video", name: chapter.video_name || getOriginalName(chapter.video_url) }
+        : null,
+      chapter.note_url
+        ? { id: "note", type: "Note", name: chapter.note_name || getOriginalName(chapter.note_url) }
+        : null,
+      chapter.assignment_url
+        ? { id: "assignment", type: "Assignment", name: chapter.assignment_name || getOriginalName(chapter.assignment_url) }
+        : null,
+    ].filter(Boolean));
+  }, [chapter]);
 
   const handleAddResource = (type) => {
     const input = document.createElement("input");
